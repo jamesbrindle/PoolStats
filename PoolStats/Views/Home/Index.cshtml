@@ -1,0 +1,371 @@
+﻿@model Tuple<List<PoolStats.Models.TwoPlayer>, List<PoolStats.Models.FourPlayer>, List<PoolStats.Models.Player>>
+
+@{
+    ViewBag.Title = "Belshaw's Pool Stats";
+
+    if (ViewData["Changable"] == null)
+    {
+        ViewData["Changable"] = false;
+    }
+
+    List<PoolStats.Models.StatsViewModel> stats = new List<PoolStats.Models.StatsViewModel>();
+
+    foreach (PoolStats.Models.TwoPlayer matches in Model.Item1)
+    {
+        string playerName = Model.Item3.Where(p => p.Id == Convert.ToInt32(matches.Player1)).FirstOrDefault().PlayerName;
+        bool hasPlayerName = false;
+
+        foreach (PoolStats.Models.StatsViewModel statsItem in stats)
+        {
+            if (statsItem.PlayerName == playerName)
+            {
+                hasPlayerName = true;
+                statsItem.GamesWon = statsItem.GamesWon + matches.Score1;
+                statsItem.GamesLost = statsItem.GamesLost + matches.Score2;
+                statsItem.TotalGames = statsItem.GamesWon + statsItem.GamesLost;
+            }
+        }
+
+        if (!hasPlayerName)
+        {
+            PoolStats.Models.StatsViewModel stat = new PoolStats.Models.StatsViewModel();
+
+            stat.PlayerName = playerName;
+            stat.GamesWon = matches.Score1;
+            stat.GamesLost = matches.Score2;
+            stat.PercentageWon = 0.0;
+
+            stat.TotalGames = matches.Score1 + matches.Score2;
+
+            stats.Add(stat);
+        }
+    }
+
+    foreach (PoolStats.Models.TwoPlayer matches in Model.Item1)
+    {
+        string playerName = Model.Item3.Where(p => p.Id == Convert.ToInt32(matches.Player2)).FirstOrDefault().PlayerName;
+        bool hasPlayerName = false;
+
+        foreach (PoolStats.Models.StatsViewModel statsItem in stats)
+        {
+            if (statsItem.PlayerName == playerName)
+            {
+                hasPlayerName = true;
+                statsItem.GamesWon = statsItem.GamesWon + matches.Score2;
+                statsItem.GamesLost = statsItem.GamesLost + matches.Score1;
+                statsItem.TotalGames = statsItem.GamesWon + statsItem.GamesLost;
+            }
+        }
+
+        if (!hasPlayerName)
+        {
+            PoolStats.Models.StatsViewModel stat = new PoolStats.Models.StatsViewModel();
+
+            stat.PlayerName = playerName;
+            stat.GamesWon = matches.Score2;
+            stat.GamesLost = matches.Score1;
+            stat.PercentageWon = 0.0;
+
+            stat.TotalGames = matches.Score1 + matches.Score2;
+
+            stats.Add(stat);
+        }
+    }
+
+    foreach (PoolStats.Models.StatsViewModel statsItem in stats)
+    {
+        double percentage = ((double)statsItem.GamesWon / (double)statsItem.TotalGames) * 100;
+        statsItem.PercentageWon = percentage;
+    }
+
+    stats.Sort((y, x) => x.PercentageWon.CompareTo(y.PercentageWon));
+}
+
+<div class="jumbotron">
+    <h2>Current Stats</h2>
+    <span style="font-size: 12pt;">2 Player match stats only...</span><br /><br />
+    <p style="font-size: 12pt;">
+
+        @{
+            int i = 0;
+        }
+
+        @foreach (PoolStats.Models.StatsViewModel stat in stats)
+        {
+            string percentage = stat.PercentageWon.ToString("#.#") + "%";
+
+            if (i == 0)
+            {
+                <span style="font-weight: bold; color: red;">@Html.DisplayFor(s => stat.PlayerName)&nbsp; &nbsp; (In the lead)</span> <br />
+            }
+            else
+            {
+                <span style="font-weight: bold;">@Html.DisplayFor(s => stat.PlayerName)</span> <br />
+            }
+
+            <span>Percentage Winning: </span><span style="color: red;">@Html.DisplayFor(s => percentage) </span><br />
+            <span>Total Matches: @Html.DisplayFor(s => stat.TotalGames). Total Won: @Html.DisplayFor(s => stat.GamesWon) </span><br /><br />
+
+            i++;
+
+        }
+    </p>
+</div>
+
+<div class="row" style="padding-left: 20px; padding-right: 20px; margin-top: -20px;">
+    @if (((bool)ViewData["Changable"]))
+    {
+        @Html.ActionLink("Add Players", "CreatePlayers")
+    }
+    else
+    {
+        <a href='#' onClick='alert("You need to unlock (top right).")'>Add Players</a>
+    }
+
+    <br /><br />
+    <h4>Two Player Scores</h4>
+    <p style="padding-top: 10px">
+        @if (((bool)ViewData["Changable"]))
+        {
+            @Html.ActionLink("Create New", "Create2p")
+        }
+        else
+        {
+            <a href='#' onClick='alert("You need to unlock (top right).")'>Create New </a>
+        }
+    </p>
+    <table class="table" align="center" style="width: 100%; vertical-align: middle;">
+        <tr>
+            <th>
+                <span style="margin-right: -12px;">Player</span>
+            </th>
+            <th>
+                &nbsp;
+            </th>
+            <th>
+                <span style="margin-right: -12px;">Player</span>
+            </th>
+            <th>
+                &nbsp;
+            </th>
+            <th>
+                <span style="margin-right: -12px;">Score</span>
+            </th>
+            <th>
+                &nbsp;
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Item1)
+            {
+            <tr>
+                <td style="vertical-align: middle;">
+                    <span style="margin-right: -12px;">@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Player1)).FirstOrDefault().PlayerName)</span>
+                </td>
+                <td style="white-space: nowrap; vertical-align: middle;">
+
+
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a href='@Url.Action("Add2p", "Home", new { item.ID, s = "1" })'>
+                            <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
+                        </a>
+                    }
+
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a style="margin-right: -12px;" href='@Url.Action("Subtract2p", "Home", new { item.ID, s = "1" })'>
+                            <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="margin-right: -12px;" href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
+                        </a>
+                    }
+                </td>
+                <td style="vertical-align: middle;">
+                    <span style="margin-right: -12px;">@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Player2)).FirstOrDefault().PlayerName)</span>
+                </td>
+                <td style="white-space: nowrap; vertical-align: middle;">
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a href='@Url.Action("Add2p", "Home", new { item.ID, s = "2" })'>
+                            <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
+                        </a>
+                    }
+
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a href='@Url.Action("Subtract2p", "Home", new { item.ID, s = "2" })'>
+                            <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
+                        </a>
+                    }
+                </td>
+                <td style="vertical-align: middle;">
+                    @Html.DisplayFor(modelItem => item.Score1)<span> / </span>@Html.DisplayFor(modelItem => item.Score2)
+                </td>
+                <td style="vertical-align: middle;">
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a href='@Url.Action("Delete2p", "Home", new { item.ID })'>
+                            <img src='@Url.Content("~/Content/Images/delete.jpg")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/delete.jpg")' style="width: 25px" />
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<br />
+<div class="row" style="padding-left: 20px; padding-right: 20px; margin-top: -20px;">
+    <h4>Four Player Scores</h4>
+    <p style="padding-top: 10px">
+        @if (((bool)ViewData["Changable"]))
+        {
+            @Html.ActionLink("Create New", "Create4p")
+        }
+        else
+        {
+            <a href='#' onClick='alert("You need to unlock (top right).")'>Create New </a>
+        }
+    </p>
+    <table class="table" align="center" style="width: 100%; vertical-align: middle;">
+        <tr>
+            <th>
+                <span style="margin-right: -12px;">Players</span>
+            </th>
+            <th>
+                &nbsp;
+            </th>
+            <th>
+                <span style="margin-right: -12px;">Players</span>
+            </th>
+            <th>
+                &nbsp;
+            </th>
+            <th>
+                <span style="margin-right: -12px;">Score</span>
+            </th>
+            <th>
+                &nbsp;
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Item2)
+            {
+            <tr>
+                <td style="vertical-align: middle;">
+                    <span style="margin-right: -150px;">
+                        @Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Players1.Split(',')[0])).FirstOrDefault().PlayerName)<br />&amp;<br />
+                        @Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Players1.Split(',')[1])).FirstOrDefault().PlayerName)
+                    </span>
+                </td>
+                <td style="white-space: nowrap; vertical-align: middle;">
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a href='@Url.Action("Add4p", "Home", new { item.ID, s = "1" })'>
+                            <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
+                        </a>
+                    }
+
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a style="margin-right: -12px;" href='@Url.Action("Subtract4p", "Home", new { item.ID, s = "1" })'>
+                            <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="margin-right: -12px;" href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
+                        </a>
+                    }
+                </td>
+                <td style="vertical-align: middle;">
+                    <span style="margin-right: -150px;">
+                        @Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Players2.Split(',')[0])).FirstOrDefault().PlayerName)<br />&amp;<br />
+                        @Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Players2.Split(',')[1])).FirstOrDefault().PlayerName)
+                    </span>
+                </td>
+                <td style="white-space: nowrap; vertical-align: middle;">
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a href='@Url.Action("Add4p", "Home", new { item.ID, s = "2" })'>
+                            <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
+                        </a>
+                    }
+
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a href='@Url.Action("Subtract4p", "Home", new { item.ID, s = "2" })'>
+                            <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
+                        </a>
+                    }
+                </td>
+                <td style="vertical-align: middle;">
+                    @Html.DisplayFor(modelItem => item.Score1)<span> / </span>@Html.DisplayFor(modelItem => item.Score2)
+                </td>
+                <td style="vertical-align: middle;">
+                    @if (((bool)ViewData["Changable"]))
+                    {
+                        <a href='@Url.Action("Delete4p", "Home", new { item.ID })'>
+                            <img src='@Url.Content("~/Content/Images/delete.jpg")' style="width: 25px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                            <img src='@Url.Content("~/Content/Images/delete.jpg")' style="width: 25px" />
+                        </a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+

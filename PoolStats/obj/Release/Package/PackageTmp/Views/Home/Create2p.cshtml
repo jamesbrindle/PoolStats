@@ -1,0 +1,54 @@
+﻿@model PoolStats.Models.TwoPlayer
+
+@{
+    ViewBag.Title = "Create Match";
+
+    List<PoolStats.Models.Player> players = (List<PoolStats.Models.Player>)ViewData["CurrentPlayers"];
+
+}
+
+@using (Html.BeginForm("Submit2p", "Home", FormMethod.Post, new { @encType = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <fieldset>
+
+        <div class="form-horizontal">
+            <br />
+            <h4>Two Player Match Creation</h4><br />
+
+            <div class="form-group">
+                <span class="control-label col-md-2" style="font-weight: bold;">Player 1</span>
+                <div class="col-md-10" style="padding-top: 10px;">
+
+                    @Html.DropDownList("player1", new SelectList(players.AsEnumerable(), "Id", "PlayerName"), new { @class = "form-control", @style = "width: 100%;" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <span class="control-label col-md-2" style="font-weight: bold;">Player 2</span>
+                <div class="col-md-10" style="padding-top: 10px;">
+
+                    @Html.DropDownList("player2", new SelectList(players.AsEnumerable(), "Id", "PlayerName"), new { @class = "form-control", @style = "width: 100%;" })
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @using (Html.BeginForm("Submit2p", "Home"))
+                    {
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    }
+                </div>
+            </div>
+        </div>
+    </fieldset>
+}
+
+<br />
+<div>
+    @Html.ActionLink("Back to List", "Back", new { id = "" })
+</div>
+

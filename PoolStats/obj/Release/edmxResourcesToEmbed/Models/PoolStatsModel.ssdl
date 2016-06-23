@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PoolStatsDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="FourPlayer">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Players1" Type="varchar(max)" Nullable="false" />
+    <Property Name="Score1" Type="int" />
+    <Property Name="Players2" Type="varchar(max)" Nullable="false" />
+    <Property Name="Score2" Type="int" />
+    <Property Name="Comments" Type="varchar(max)" />
+    <Property Name="ID" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Pin">
+    <Key>
+      <PropertyRef Name="PinNumber" />
+    </Key>
+    <Property Name="PinNumber" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Players">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="PlayerName" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="TwoPlayer">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Player1" Type="varchar(max)" Nullable="false" />
+    <Property Name="Score1" Type="int" />
+    <Property Name="Player2" Type="varchar(max)" Nullable="false" />
+    <Property Name="Score2" Type="int" />
+    <Property Name="Comments" Type="varchar(max)" />
+    <Property Name="ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="PoolStatsDBModelStoreContainer">
+    <EntitySet Name="FourPlayer" EntityType="Self.FourPlayer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Players" EntityType="Self.Players" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TwoPlayer" EntityType="Self.TwoPlayer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pin" EntityType="Self.Pin" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Pin].[PinNumber] AS [PinNumber]
+    FROM [dbo].[Pin] AS [Pin]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

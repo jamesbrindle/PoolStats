@@ -1,0 +1,62 @@
+﻿@model PoolStats.Models.Player
+
+
+@using (Html.BeginForm("SubmitPlayer", "Home", FormMethod.Post, new { @encType = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <br />
+        <h4>Add Player</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <span class="control-label col-md-2" style="font-weight: bold;">Player Name</span>
+            <div class="col-md-10" style="padding-top: 10px;">
+                @Html.EditorFor(model => Model.PlayerName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => Model.PlayerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+                @using (Html.BeginForm("SubmitPlayer", "Home"))
+                {
+                    <input type="submit" value="Create" class="btn btn-default" />
+                }
+
+            </div>
+        </div>
+    </div>
+}
+
+<br />
+
+<div>
+    @Html.ActionLink("Back to List", "Back", new { id = "" })
+</div>
+
+<br />
+<h4>Current Players</h4>
+
+@{
+    List<PoolStats.Models.Player> players = (List<PoolStats.Models.Player>)ViewData["CurrentPlayers"];
+}
+
+@foreach (var player in players)
+{
+    @Html.DisplayFor(p => player.PlayerName)<br />
+}
+
+<br />
+
+<div>
+    @Html.ActionLink("Back to List", "Back", new { id = "" })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

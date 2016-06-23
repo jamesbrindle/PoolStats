@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PoolStatsDBModelStoreContainer" CdmEntityContainer="PoolStatsDB_Entities">
+    <EntitySetMapping Name="Players">
+      <EntityTypeMapping TypeName="PoolStatsDBModel.Player">
+        <MappingFragment StoreEntitySet="Players">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PlayerName" ColumnName="PlayerName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FourPlayers">
+      <EntityTypeMapping TypeName="PoolStatsDBModel.FourPlayer">
+        <MappingFragment StoreEntitySet="FourPlayer">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Players1" ColumnName="Players1" />
+          <ScalarProperty Name="Score1" ColumnName="Score1" />
+          <ScalarProperty Name="Players2" ColumnName="Players2" />
+          <ScalarProperty Name="Score2" ColumnName="Score2" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pins">
+      <EntityTypeMapping TypeName="PoolStatsDBModel.Pin">
+        <MappingFragment StoreEntitySet="Pin">
+          <ScalarProperty Name="PinNumber" ColumnName="PinNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TwoPlayers">
+      <EntityTypeMapping TypeName="PoolStatsDBModel.TwoPlayer">
+        <MappingFragment StoreEntitySet="TwoPlayer">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Player1" ColumnName="Player1" />
+          <ScalarProperty Name="Score1" ColumnName="Score1" />
+          <ScalarProperty Name="Player2" ColumnName="Player2" />
+          <ScalarProperty Name="Score2" ColumnName="Score2" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
