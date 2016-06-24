@@ -137,19 +137,19 @@
     <table class="table" align="center" style="width: 100%; vertical-align: middle;">
         <tr>
             <th>
-                <span style="margin-right: -12px;">Player</span>
+                <span>Player</span>
             </th>
             <th>
                 &nbsp;
             </th>
             <th>
-                <span style="margin-right: -12px;">Player</span>
+                <span>Player</span>
             </th>
             <th>
                 &nbsp;
             </th>
             <th>
-                <span style="margin-right: -12px;">Score</span>
+                &nbsp;
             </th>
             <th>
                 &nbsp;
@@ -160,7 +160,7 @@
             {
             <tr>
                 <td style="vertical-align: middle;">
-                    <span style="margin-right: -12px;">@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Player1)).FirstOrDefault().PlayerName)</span>
+                    <span>@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Player1)).FirstOrDefault().PlayerName)</span>
                 </td>
                 <td style="white-space: nowrap; vertical-align: middle;">
 
@@ -176,23 +176,24 @@
                         <a href='#' onClick='alert("You need to unlock (top right).")'>
                             <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
                         </a>
+                        <span>&nbsp;</span>
                     }
 
                     @if (((bool)ViewData["Changable"]))
                     {
-                        <a style="margin-right: -12px;" href='@Url.Action("Subtract2p", "Home", new { item.ID, s = "1" })'>
+                        <a href='@Url.Action("Subtract2p", "Home", new { item.ID, s = "1" })'>
                             <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
                         </a>
                     }
                     else
                     {
-                        <a style="margin-right: -12px;" href='#' onClick='alert("You need to unlock (top right).")'>
+                        <a style="margin-right: -8px;" href='#' onClick='alert("You need to unlock (top right).")'>
                             <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
                         </a>
                     }
                 </td>
                 <td style="vertical-align: middle;">
-                    <span style="margin-right: -12px;">@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Player2)).FirstOrDefault().PlayerName)</span>
+                    <span>@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Player2)).FirstOrDefault().PlayerName)</span>
                 </td>
                 <td style="white-space: nowrap; vertical-align: middle;">
                     @if (((bool)ViewData["Changable"]))
@@ -206,6 +207,7 @@
                         <a href='#' onClick='alert("You need to unlock (top right).")'>
                             <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
                         </a>
+                        <span>&nbsp;</span>
                     }
 
                     @if (((bool)ViewData["Changable"]))
@@ -216,14 +218,12 @@
                     }
                     else
                     {
-                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                        <a style="margin-right: -20px;" href='#' onClick='alert("You need to unlock (top right).")'>
                             <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
                         </a>
                     }
                 </td>
-                <td style="vertical-align: middle;">
-                    @Html.DisplayFor(modelItem => item.Score1)<span> / </span>@Html.DisplayFor(modelItem => item.Score2)
-                </td>
+                <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                     @if (((bool)ViewData["Changable"]))
                     {
@@ -239,7 +239,30 @@
                     }
                 </td>
             </tr>
-        }
+            <tr>
+                <td colspan="2"  >
+                    <span style="font-weight: bold;">Scores:&nbsp;&nbsp;&nbsp;</span>
+                    @Html.DisplayFor(modelItem => item.Score1)<span> / </span>@Html.DisplayFor(modelItem => item.Score2)
+                    
+                </td>
+                <td colspan="4">
+                     @{
+                        double total = (double)item.Score1 + (double)item.Score2;
+                        double percentage1 = (double)item.Score1 / total * 100;
+                        double percentage2 = (double)item.Score2 / total * 100;
+                        string per1 = percentage1.ToString("#.##");
+                        string per2 = percentage2.ToString("#.##");
+                 
+                        <span style="color: red;">@Html.DisplayFor(modelItem => per1)</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
+                        <span style="color: red;">@Html.DisplayFor(modelItem => per2)</span><span style="color: red;">%</span>
+
+                    }
+                </td>
+
+            </tr>
+
+                        }
+
     </table>
 </div>
 <br />

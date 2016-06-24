@@ -79,4 +79,3 @@ H:\Documents\Work\Demos\MVC6\PoolStats\PoolStats\bin\Microsoft.Owin.Security.Twi
 H:\Documents\Work\Demos\MVC6\PoolStats\PoolStats\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 H:\Documents\Work\Demos\MVC6\PoolStats\PoolStats\obj\Release\PoolStats.dll
 H:\Documents\Work\Demos\MVC6\PoolStats\PoolStats\obj\Release\PoolStats.pdb
-H:\Documents\Work\Demos\MVC6\PoolStats\PoolStats\obj\Release\PoolStats.csprojResolveAssemblyReference.cache
