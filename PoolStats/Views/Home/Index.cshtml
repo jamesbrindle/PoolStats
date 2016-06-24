@@ -81,6 +81,38 @@
     stats.Sort((y, x) => x.PercentageWon.CompareTo(y.PercentageWon));
 }
 
+<audio id="sndCheer" src="http://poolstats.jb-net.co.uk/Content/Sounds/cheer.wav" autostart="false"></audio>
+<a onclick="PlayCheer()"></a>
+<script>
+    function PlayCheer() {
+        var sound = document.getElementById("sndCheer");
+        sound.play()
+    }
+</script>
+
+<audio id="sndBoo" src="http://poolstats.jb-net.co.uk/Content/Sounds/boo.wav" autostart="false"></audio>
+<a onclick="PlayBoo()"></a>
+<script>
+    function PlayBoo() {
+        var sound = document.getElementById("sndBoo");
+        sound.play()
+    }
+</script>
+
+@{
+    if (ViewData["PlaySound"] != null)
+    {
+        if (((string)ViewData["Sound"]) == "cheer")
+        {
+            <script>PlayCheer();</script>
+        }
+        else if (((string)ViewData["Sound"]) == "boo")
+        {
+            <script>PlayBoo();</script>
+        }
+    }
+}
+
 <div class="jumbotron">
     <h2>Current Stats</h2>
     <span style="font-size: 12pt;">2 Player match stats only...</span><br /><br />
@@ -176,9 +208,9 @@
                         <a href='#' onClick='alert("You need to unlock (top right).")'>
                             <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
                         </a>
-                        <span>&nbsp;</span>
-                    }
 
+                    }
+                    <span>&nbsp;</span>
                     @if (((bool)ViewData["Changable"]))
                     {
                         <a href='@Url.Action("Subtract2p", "Home", new { item.ID, s = "1" })'>
@@ -207,12 +239,12 @@
                         <a href='#' onClick='alert("You need to unlock (top right).")'>
                             <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
                         </a>
-                        <span>&nbsp;</span>
-                    }
 
+                    }
+                    <span>&nbsp;</span>
                     @if (((bool)ViewData["Changable"]))
                     {
-                        <a href='@Url.Action("Subtract2p", "Home", new { item.ID, s = "2" })'>
+                        <a style="margin-right: -20px;" href='@Url.Action("Subtract2p", "Home", new { item.ID, s = "2" })'>
                             <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
                         </a>
                     }
@@ -240,22 +272,39 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2"  >
+                <td colspan="2">
                     <span style="font-weight: bold;">Scores:&nbsp;&nbsp;&nbsp;</span>
                     @Html.DisplayFor(modelItem => item.Score1)<span> / </span>@Html.DisplayFor(modelItem => item.Score2)
-                    
+
                 </td>
                 <td colspan="4">
-                     @{
+                    @{
                         double total = (double)item.Score1 + (double)item.Score2;
                         double percentage1 = (double)item.Score1 / total * 100;
                         double percentage2 = (double)item.Score2 / total * 100;
                         string per1 = percentage1.ToString("#.##");
                         string per2 = percentage2.ToString("#.##");
-                 
-                        <span style="color: red;">@Html.DisplayFor(modelItem => per1)</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
-                        <span style="color: red;">@Html.DisplayFor(modelItem => per2)</span><span style="color: red;">%</span>
 
+                        if (item.Score1 == 0 && item.Score2 == 0)
+                        {
+                            <span style="color: red;">0</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
+                            <span style="color: red;">0</span><span style="color: red;">%</span>
+                        }
+                        else if (item.Score1 == 0 && item.Score2 != 0)
+                        {
+                            <span style="color: red;">0</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
+                            <span style="color: red;">@Html.DisplayFor(modelItem => per2)</span><span style="color: red;">%</span>
+                        }
+                        else if (item.Score1 != 0 && item.Score2 == 0)
+                        {
+                            <span style="color: red;">@Html.DisplayFor(modelItem => per1)</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
+                            <span style="color: red;">0</span><span style="color: red;">%</span>
+                        }
+                        else
+                        {
+                            <span style="color: red;">@Html.DisplayFor(modelItem => per1)</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
+                            <span style="color: red;">@Html.DisplayFor(modelItem => per2)</span><span style="color: red;">%</span>
+                        }
                     }
                 </td>
 
@@ -281,19 +330,19 @@
     <table class="table" align="center" style="width: 100%; vertical-align: middle;">
         <tr>
             <th>
-                <span style="margin-right: -12px;">Players</span>
+                <span>Players</span>
             </th>
             <th>
                 &nbsp;
             </th>
             <th>
-                <span style="margin-right: -12px;">Players</span>
+                <span>Players</span>
             </th>
             <th>
                 &nbsp;
             </th>
             <th>
-                <span style="margin-right: -12px;">Score</span>
+                &nbsp;
             </th>
             <th>
                 &nbsp;
@@ -301,7 +350,7 @@
         </tr>
 
         @foreach (var item in Model.Item2)
-            {
+        {
             <tr>
                 <td style="vertical-align: middle;">
                     <span style="margin-right: -150px;">
@@ -322,22 +371,22 @@
                             <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
                         </a>
                     }
-
+                    <span>&nbsp;</span>
                     @if (((bool)ViewData["Changable"]))
                     {
-                        <a style="margin-right: -12px;" href='@Url.Action("Subtract4p", "Home", new { item.ID, s = "1" })'>
+                        <a style="margin-right: -5px;" href='@Url.Action("Subtract4p", "Home", new { item.ID, s = "1" })'>
                             <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
                         </a>
                     }
                     else
                     {
-                        <a style="margin-right: -12px;" href='#' onClick='alert("You need to unlock (top right).")'>
+                        <a style="margin-right: -5px;" href='#' onClick='alert("You need to unlock (top right).")'>
                             <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
                         </a>
                     }
                 </td>
                 <td style="vertical-align: middle;">
-                    <span style="margin-right: -150px;">
+                    <span style="margin-right: -100px;">
                         @Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Players2.Split(',')[0])).FirstOrDefault().PlayerName)<br />&amp;<br />
                         @Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == Convert.ToInt32(item.Players2.Split(',')[1])).FirstOrDefault().PlayerName)
                     </span>
@@ -355,23 +404,21 @@
                             <img src='@Url.Content("~/Content/Images/add.png")' style="width: 25px" />
                         </a>
                     }
-
+                    <span>&nbsp;</span>
                     @if (((bool)ViewData["Changable"]))
                     {
-                        <a href='@Url.Action("Subtract4p", "Home", new { item.ID, s = "2" })'>
+                        <a style="margin-right: -20px;" href='@Url.Action("Subtract4p", "Home", new { item.ID, s = "2" })'>
                             <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
                         </a>
                     }
                     else
                     {
-                        <a href='#' onClick='alert("You need to unlock (top right).")'>
+                        <a style="margin-right: -20px;" href='#' onClick='alert("You need to unlock (top right).")'>
                             <img src='@Url.Content("~/Content/Images/subtract.png")' style="width: 25px" />
                         </a>
                     }
                 </td>
-                <td style="vertical-align: middle;">
-                    @Html.DisplayFor(modelItem => item.Score1)<span> / </span>@Html.DisplayFor(modelItem => item.Score2)
-                </td>
+                <td style="vertical-align: middle;"></td>
                 <td style="vertical-align: middle;">
                     @if (((bool)ViewData["Changable"]))
                     {
@@ -388,7 +435,58 @@
 
                 </td>
             </tr>
-        }
+            <tr>
+                <td colspan="2">
+                    <span style="font-weight: bold;">Scores:&nbsp;&nbsp;&nbsp;</span>
+                    @Html.DisplayFor(modelItem => item.Score1)<span> / </span>@Html.DisplayFor(modelItem => item.Score2)
+
+                </td>
+                <td colspan="4">
+                    @{
+                        double total = (double)item.Score1 + (double)item.Score2;
+                        double percentage1 = (double)item.Score1 / total * 100;
+                        double percentage2 = (double)item.Score2 / total * 100;
+                        string per1 = percentage1.ToString("#.##");
+                        string per2 = percentage2.ToString("#.##");
+
+                        if (item.Score1 == 0 && item.Score2 == 0)
+                        {
+                            <span style="color: red;">0</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
+                            <span style="color: red;">0</span><span style="color: red;">%</span>
+                        }
+                        else if (item.Score1 == 0 && item.Score2 != 0)
+                        {
+                            <span style="color: red;">0</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
+                            <span style="color: red;">@Html.DisplayFor(modelItem => per2)</span><span style="color: red;">%</span>
+                        }
+                        else if (item.Score1 != 0 && item.Score2 == 0)
+                        {
+                            <span style="color: red;">@Html.DisplayFor(modelItem => per1)</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
+                            <span style="color: red;">0</span><span style="color: red;">%</span>
+                        }
+                        else
+                        {
+
+                            <span style="color: red;">@Html.DisplayFor(modelItem => per1)</span><span style="color: red;">%&nbsp;&nbsp; / &nbsp;</span>
+                            <span style="color: red;">@Html.DisplayFor(modelItem => per2)</span><span style="color: red;">%</span>
+                        }
+
+                    }
+                </td>
+
+            </tr>
+                        }
     </table>
+    <br />
+
+    <h4>Sound Archive</h4>
+    <span style="font-size: 8pt;">Send me the links for the sounds you want me to add and I'll see what I can do.</span><br /><br />
+    <p style="padding-top: 10px">
+        <a href="#!" onclick='PlayCheer()'>Cheer</a>
+    </p>
+    <p style="padding-top: 10px">
+        <a href="#!" onclick='PlayBoo()'>Boo</a>
+    </p>
+
 </div>
 

@@ -153,8 +153,11 @@ namespace PoolStats.Controllers
         }
 
         public ViewResult Add2p(int id, string s)
-        {
+        {     
             Changable = true;
+
+            ViewData["PlaySound"] = true;
+            ViewData["Sound"] = "cheer";
 
             TwoPlayer score = _entities.TwoPlayers.Where(p => p.ID == id).FirstOrDefault();
 
@@ -171,6 +174,9 @@ namespace PoolStats.Controllers
         public ViewResult Subtract2p(int id, string s)
         {
             Changable = true;
+
+            ViewData["PlaySound"] = true;
+            ViewData["Sound"] = "boo";
 
             TwoPlayer score = _entities.TwoPlayers.Where(p => p.ID == id).FirstOrDefault();
 
@@ -204,6 +210,7 @@ namespace PoolStats.Controllers
         public ActionResult Create4p()
         {
             Changable = true;
+
 
             ViewData["CurrentPlayers"] = _entities.Players.ToList();
 
@@ -242,6 +249,9 @@ namespace PoolStats.Controllers
         {
             Changable = true;
 
+            ViewData["PlaySound"] = true;
+            ViewData["Sound"] = "cheer";
+
             FourPlayer score = _entities.FourPlayers.Where(p => p.ID == id).FirstOrDefault();
 
             if (s == "1")
@@ -257,6 +267,9 @@ namespace PoolStats.Controllers
         public ViewResult Subtract4p(int id, string s)
         {
             Changable = true;
+
+            ViewData["PlaySound"] = true;
+            ViewData["Sound"] = "boo";
 
             FourPlayer score = _entities.FourPlayers.Where(p => p.ID == id).FirstOrDefault();
 
