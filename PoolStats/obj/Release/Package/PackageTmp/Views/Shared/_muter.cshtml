@@ -1,0 +1,16 @@
+﻿@if (ViewData["MuteSound"] == null)
+{
+    ViewData["MuteSound"] = false;
+}
+@if (((bool)ViewData["MuteSound"]))
+{
+    <a style="padding-right: 10px;" href='@Url.Action("Unmute", "Home")'>
+        <img src='@Url.Content("~/Content/Images/mute.png")' style="width: 26px" />
+    </a>
+}
+else
+{
+    <a style="padding-right: 10px;" href='@Url.Action("Mute", "Home")'>
+        <img src='@Url.Content("~/Content/Images/unmute.png")' style="width: 26px" />
+    </a>
+}

@@ -266,13 +266,17 @@
     <Content Include="Content\Images\add.png" />
     <Content Include="Content\Images\delete.jpg" />
     <Content Include="Content\Images\icons\poolball.ico" />
-    <Content Include="Content\Images\slide1.jpg" />
-    <Content Include="Content\Images\slide2.jpg" />
-    <Content Include="Content\Images\slide3.jpg" />
+    <Content Include="Content\Images\locked.png" />
+    <Content Include="Content\Images\mute.png" />
+    <Content Include="Content\Images\poolball.png" />
+    <Content Include="Content\Images\slide3_narrow.png" />
     <Content Include="Content\Images\subtract.png" />
+    <Content Include="Content\Images\unlocked.png" />
+    <Content Include="Content\Images\unmute.png" />
     <Content Include="Content\Sounds\boo.wav" />
     <Content Include="Content\Sounds\cheer.wav" />
     <Content Include="favicon-16x16.png" />
+    <Content Include="favicon-194x194.png" />
     <Content Include="favicon-32x32.png" />
     <Content Include="favicon-96x96.png" />
     <Content Include="favicon.ico" />
@@ -343,6 +347,7 @@
     <Content Include="Views\Home\CreatePlayers.cshtml" />
     <Content Include="Views\Home\Create4p.cshtml" />
     <Content Include="Views\Home\Unlock.cshtml" />
+    <Content Include="Views\Shared\_muter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

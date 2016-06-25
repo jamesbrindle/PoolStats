@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
@@ -38,25 +38,50 @@
                         <span style="color:white; vertical-align: middle; padding-top: 25px; padding-left: 10px; font-size: 20px;">Belshaw's Pool Stats</span>
                     </td>
                     <td style="vertical-align: middle; padding-top: 8px;">
+                        <div style="margin-right: -10px;">
+                            @if (ViewData["Changable"] == null)
+                            {
+                                ViewData["Changable"] = false;
+                            }
 
-                        @if (ViewData["Changable"] == null)
-                        {
-                            ViewData["Changable"] = false;
-                        }
-                        @if (((bool)ViewData["Changable"]))
-                        {
-                            <span style="text-align: right;">@Html.ActionLink("Lock", "Lock", "Home")</span>
-                        }
-                        else
-                        {
-                            <span style="text-align: right;">@Html.ActionLink("Unlock", "EnterPin", "Home")</span>
-                        }
+                            @if (ViewData["MutedSound"] == null)
+                            {
+                                ViewData["MutedSound"] = false;
+                            }
+                            @if (((bool)ViewData["MutedSound"]))
+                            {
+                                <a style="padding-right: 10px;" href='@Url.Action("Unmute", "Home", new { changeable = ((bool)ViewData["Changable"]) })'>
+                                    <img src='@Url.Content("~/Content/Images/mute.png")' style="width: 26px" />
+                                </a>
+                            }
+                            else
+                            {
+                                <a style="padding-right: 10px;" href='@Url.Action("Mute", "Home", new { changeable = ((bool)ViewData["Changable"]) })'>
+                                    <img src='@Url.Content("~/Content/Images/unmute.png")' style="width: 26px" />
+                                </a>
+                            }
+
+                            @if (((bool)ViewData["Changable"]))
+                            {
+                                <a href='@Url.Action("Lock", "Home")'>
+                                    <img src='@Url.Content("~/Content/Images/unlocked.png")' style="width: 30px" />
+                                </a>
+                            }
+                            else
+                            {
+                                <a href='@Url.Action("EnterPin", "Home")'>
+                                    <img src='@Url.Content("~/Content/Images/locked.png")' style="width: 30px" />
+                                </a>
+                            }
+                        </div>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
+    <img id="mainImage" class="img-responsive" src="~/Content/Images/slide3_narrow.png" />
     <div class="container body-content">
+
         @RenderBody()
         <hr />
     </div>

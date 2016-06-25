@@ -1,5 +1,9 @@
 ﻿@model PoolStats.Models.Player
 
+<script>
+    var el = document.getElementById('mainImage');
+    el.parentNode.removeChild(el);
+</script>
 
 @using (Html.BeginForm("SubmitPlayer", "Home", FormMethod.Post, new { @encType = "multipart/form-data" }))
 {

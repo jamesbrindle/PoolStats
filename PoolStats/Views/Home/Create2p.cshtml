@@ -7,6 +7,11 @@
 
 }
 
+<script>
+    var el = document.getElementById('mainImage');
+    el.parentNode.removeChild(el);
+</script>
+
 @using (Html.BeginForm("Submit2p", "Home", FormMethod.Post, new { @encType = "multipart/form-data" }))
 {
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })

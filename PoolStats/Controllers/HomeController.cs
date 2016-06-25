@@ -28,14 +28,65 @@ namespace PoolStats.Controllers
             }
         }
 
+        public bool MutedSound
+        {
+            get
+            {
+                if (CookieStore.GetCookie("muted") == null)
+                    return false;
+                else
+                {
+                    string muted = CookieStore.GetCookie("muted");
+
+                    if (muted == "true")
+                    {
+                        ViewData["MutedSound"] = true;
+                        return true;
+                    }
+                    else
+                    {
+                        ViewData["MutedSound"] = false;
+                        return false;
+                    }
+                }             
+            }
+            set
+            {
+                if (value)
+                {
+                    ViewData["MutedSound"] = true;
+                    CookieStore.SetCookie("muted", "true", new TimeSpan(2, 0, 0, 0));
+                }
+                else
+                {
+                    ViewData["MutedSound"] = false;
+                    CookieStore.SetCookie("muted", "false", new TimeSpan(2, 0, 0, 0));
+                }
+            }
+        }
+
+        private void AlwaysUpdate()
+        {
+            HttpContext.Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
+            HttpContext.Response.Cache.SetValidUntilExpires(false);
+            HttpContext.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+            HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            HttpContext.Response.Cache.SetNoStore();
+        }
+
         public ActionResult Index()
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
+
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
         public ActionResult Back()
         {
             Changable = true;
+            var mute = MutedSound;
+            AlwaysUpdate();
 
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
@@ -43,6 +94,8 @@ namespace PoolStats.Controllers
         public ActionResult BackLocked()
         {
             Changable = false;
+            var mute = MutedSound;
+            AlwaysUpdate();
 
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
@@ -50,15 +103,35 @@ namespace PoolStats.Controllers
 
         public ViewResult Unlock()
         {
-
             Changable = true;
+            var mute = MutedSound;
+            AlwaysUpdate();
 
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
+
+        public ViewResult Mute(bool changeable)
+        {
+            MutedSound = true;
+            Changable = changeable;
+
+            return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
+
+        }
+        public ViewResult Unmute(bool changeable)
+        {
+            MutedSound = false;
+            Changable = changeable;
+
+            return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
+        }
+
         public ViewResult Lock()
         {
 
             Changable = false;
+            var mute = MutedSound;
+            AlwaysUpdate();
 
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
@@ -66,12 +139,17 @@ namespace PoolStats.Controllers
         public ActionResult EnterPin()
         {
             Changable = true;
+            var mute = MutedSound;
+            AlwaysUpdate();
 
             return View("Unlock");
         }
 
         public ActionResult ValidatePin(string ePin)
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
+
             string correctPin = _entities.Pins.FirstOrDefault().PinNumber;
 
             if (ePin == correctPin)
@@ -90,6 +168,8 @@ namespace PoolStats.Controllers
 
         public ActionResult CreatePlayers()
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             ViewData["CurrentPlayers"] = _entities.Players.ToList();
@@ -100,6 +180,8 @@ namespace PoolStats.Controllers
 
         public ActionResult SubmitPlayer(Models.Player input)
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             int max = _entities.Players.Max(p => p.Id);
@@ -117,6 +199,8 @@ namespace PoolStats.Controllers
 
         public ActionResult Create2p()
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             ViewData["CurrentPlayers"] = _entities.Players.ToList();
@@ -126,6 +210,8 @@ namespace PoolStats.Controllers
 
         public ActionResult Submit2p(string player1, string player2)
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             var twoPlayerModel = new PoolStats.Models.TwoPlayer();
@@ -143,7 +229,7 @@ namespace PoolStats.Controllers
                 max = _entities.TwoPlayers.Max(p => p.ID);
             }
             catch { }
-            
+
             twoPlayerModel.ID = max + 1;
 
             _entities.TwoPlayers.Add(twoPlayerModel);
@@ -152,8 +238,10 @@ namespace PoolStats.Controllers
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
-        public ViewResult Add2p(int id, string s)
-        {     
+        public ViewResult Add2p(int id, string s, string anchorId)
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             ViewData["PlaySound"] = true;
@@ -168,11 +256,14 @@ namespace PoolStats.Controllers
 
             _entities.SaveChanges();
 
+            ViewData["AnchorID"] = anchorId;
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
-        public ViewResult Subtract2p(int id, string s)
+        public ViewResult Subtract2p(int id, string s, string anchorId)
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             ViewData["PlaySound"] = true;
@@ -187,11 +278,14 @@ namespace PoolStats.Controllers
 
             _entities.SaveChanges();
 
+            ViewData["AnchorID"] = anchorId;
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
-        public ViewResult Delete2p(int id)
+        public ViewResult Delete2p(int id, string anchorId)
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             TwoPlayer score = _entities.TwoPlayers.Where(p => p.ID == id).FirstOrDefault();
@@ -200,6 +294,7 @@ namespace PoolStats.Controllers
 
             _entities.SaveChanges();
 
+            ViewData["AnchorID"] = anchorId;
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
@@ -209,8 +304,9 @@ namespace PoolStats.Controllers
 
         public ActionResult Create4p()
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
-
 
             ViewData["CurrentPlayers"] = _entities.Players.ToList();
 
@@ -219,6 +315,8 @@ namespace PoolStats.Controllers
 
         public ActionResult Submit4p(string player1, string player2, string player3, string player4)
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             var fourPlayerModel = new PoolStats.Models.FourPlayer();
@@ -245,8 +343,10 @@ namespace PoolStats.Controllers
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
-        public ViewResult Add4p(int id, string s)
+        public ViewResult Add4p(int id, string s, string anchorId)
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             ViewData["PlaySound"] = true;
@@ -261,11 +361,14 @@ namespace PoolStats.Controllers
 
             _entities.SaveChanges();
 
+            ViewData["AnchorID"] = anchorId;
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
-        public ViewResult Subtract4p(int id, string s)
+        public ViewResult Subtract4p(int id, string s, string anchorId)
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             ViewData["PlaySound"] = true;
@@ -280,11 +383,14 @@ namespace PoolStats.Controllers
 
             _entities.SaveChanges();
 
+            ViewData["AnchorID"] = anchorId;
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
-        public ViewResult Delete4p(int id)
+        public ViewResult Delete4p(int id, string anchorId)
         {
+            AlwaysUpdate();
+            var mute = MutedSound;
             Changable = true;
 
             FourPlayer score = _entities.FourPlayers.Where(p => p.ID == id).FirstOrDefault();
@@ -293,10 +399,43 @@ namespace PoolStats.Controllers
 
             _entities.SaveChanges();
 
+            ViewData["AnchorID"] = anchorId;
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
         #endregion
 
+    }
+
+    public class CookieStore
+    {
+        public static void SetCookie(string key, string value, TimeSpan expires)
+        {
+            HttpCookie cookie = new HttpCookie(key, value);
+
+            if (HttpContext.Current.Request.Cookies[key] != null)
+            {
+                var cookieOld = HttpContext.Current.Request.Cookies[key];
+                cookieOld.Expires = DateTime.Now.Add(expires);
+                cookieOld.Value = cookie.Value;
+                HttpContext.Current.Response.Cookies.Add(cookieOld);
+            }
+            else
+            {
+                cookie.Expires = DateTime.Now.Add(expires);
+                HttpContext.Current.Response.Cookies.Add(cookie);
+            }
+        }
+        public static string GetCookie(string key)
+        {
+            string value = string.Empty;
+            HttpCookie cookie = HttpContext.Current.Request.Cookies[key];
+
+            if (cookie != null)
+            {
+                value = cookie.Value;
+            }
+            return value;
+        }
     }
 }
