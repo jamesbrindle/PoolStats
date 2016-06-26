@@ -31,14 +31,13 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <table style="width: 100%; vertical-align: middle;">
-
+            <table style="width: 100%; vertical-align: top;">
                 <tr>
-                    <td>
-                        <span style="color:white; vertical-align: middle; padding-top: 25px; padding-left: 10px; font-size: 20px;">Belshaw's Pool Stats</span>
+                    <td style="vertical-align: top; padding-top: 8px;">
+                        <p style="color:white; margin-left: -10px; vertical-align: top; padding-top: 6px; padding-left: 10px; font-size: 20px;">@Html.ActionLink("Belshaw's Pool Stats", "Index", null, new { @style = "color: white;" })</p>
                     </td>
-                    <td style="vertical-align: middle; padding-top: 8px;">
-                        <div style="margin-right: -10px;">
+                    <td style="vertical-align: top; padding-top: 8px;">
+                        <div style="margin-right: 14px;">
                             @if (ViewData["Changable"] == null)
                             {
                                 ViewData["Changable"] = false;
@@ -51,37 +50,101 @@
                             @if (((bool)ViewData["MutedSound"]))
                             {
                                 <a style="padding-right: 10px;" href='@Url.Action("Unmute", "Home", new { changeable = ((bool)ViewData["Changable"]) })'>
-                                    <img src='@Url.Content("~/Content/Images/mute.png")' style="width: 26px" />
+                                    <img src='@Url.Content("~/Content/Images/mute.png")' style="width: 26px; padding-top: 7px;" />
                                 </a>
                             }
                             else
                             {
                                 <a style="padding-right: 10px;" href='@Url.Action("Mute", "Home", new { changeable = ((bool)ViewData["Changable"]) })'>
-                                    <img src='@Url.Content("~/Content/Images/unmute.png")' style="width: 26px" />
+                                    <img src='@Url.Content("~/Content/Images/unmute.png")' style="width: 26px; padding-top: 7px;" />
                                 </a>
                             }
 
                             @if (((bool)ViewData["Changable"]))
                             {
                                 <a href='@Url.Action("Lock", "Home")'>
-                                    <img src='@Url.Content("~/Content/Images/unlocked.png")' style="width: 30px" />
+                                    <img src='@Url.Content("~/Content/Images/unlocked.png")' style="width: 30px; padding-top: 7px;" />
                                 </a>
                             }
                             else
                             {
                                 <a href='@Url.Action("EnterPin", "Home")'>
-                                    <img src='@Url.Content("~/Content/Images/locked.png")' style="width: 30px" />
+                                    <img src='@Url.Content("~/Content/Images/locked.png")' style="width: 30px; padding-top: 7px;" />
                                 </a>
                             }
                         </div>
                     </td>
                 </tr>
             </table>
+            <div style="text-align:right; margin-right: -20px;">
+                <table style="text-align:right; width: 100%; margin-top: -50px;">
+                    <tr>
+                        <td style="text-align: center;">
+                            <div class="navbar-header" style="margin-top: -3px;">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                            </div>
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+                                    <li>
+                                        @if (((bool)ViewData["Changable"]))
+                                        {
+                                            @Html.ActionLink("Add / Modify Players", "CreatePlayers", "Home")
+                                        }
+                                        else
+                                        {
+                                            <a href='#' onClick='alert("You need to unlock (top right).")'>
+                                                Add / Modify Players
+                                            </a>
+                                        }
+                                    </li>
+                                    <li>
+                                        @if (((bool)ViewData["Changable"]))
+                                        {
+                                            @Html.ActionLink("Create New Two Player Match", "Create2p", "Home")
+                                        }
+                                        else
+                                        {
+                                            <a href='#' onClick='alert("You need to unlock (top right).")'>
+                                                Create New Two Player Match
+                                            </a>
+                                        }
+                                    </li>
+                                    <li>
+                                        @if (((bool)ViewData["Changable"]))
+                                        {
+                                            @Html.ActionLink("Create New Four Player Match", "Create4p", "Home")
+                                        }
+                                        else
+                                        {
+                                            <a href='#' onClick='alert("You need to unlock (top right).")'>
+                                                Create New Four Player Match
+                                            </a>
+                                        }
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("Sound Archive", "SoundArchive", new { locked = Convert.ToString(ViewData["Changable"]) })
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("Image Gallary", "ImageArchive", new { locked = Convert.ToString(ViewData["Changable"]) })
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("Score Backups", "BackupArchive", new { locked = Convert.ToString(ViewData["Changable"]) })
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
-    <img id="mainImage" class="img-responsive" src="~/Content/Images/slide3_narrow.png" />
+    <img id="mainImage" class="img-responsive" src="~/Content/Images/slide3_narrow.jpg" />
     <div class="container body-content">
-
         @RenderBody()
         <hr />
     </div>

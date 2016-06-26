@@ -1,0 +1,34 @@
+﻿
+<script>
+    var el = document.getElementById('mainImage').src = "/Content/Images/girl.jpg";
+</script>
+
+
+<br />
+<h4>Image Gallary</h4>
+
+<br />
+<p style="font-size:20pt; text-align: center;">
+
+    Coming Soon!
+
+</p>
+
+<br />
+<br />
+<div>
+@if (((bool)ViewData["Changable"]))
+{
+    @Html.ActionLink("Back to List", "Back", new { id = "" })
+}
+else
+{
+    @Html.ActionLink("Back to List", "BackLocked", new { id = "" })
+}
+</div>
+<br />
+<br />
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,6 +1,7 @@
 ﻿using PoolStats.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -48,7 +49,7 @@ namespace PoolStats.Controllers
                         ViewData["MutedSound"] = false;
                         return false;
                     }
-                }             
+                }
             }
             set
             {
@@ -177,6 +178,15 @@ namespace PoolStats.Controllers
             return View(_entities.Players.Create());
         }
 
+        public ActionResult ModifyPlayer(int id)
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
+            Changable = true;
+
+            return View(_entities.Players.Find(id));
+        }
+
 
         public ActionResult SubmitPlayer(Models.Player input)
         {
@@ -190,6 +200,88 @@ namespace PoolStats.Controllers
 
             _entities.Players.Add(input);
             _entities.SaveChanges();
+
+            return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
+        }
+
+        public ActionResult SubmitChangePlayer(Models.Player input)
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
+            Changable = true;
+
+            Player player = _entities.Players.Find(input.Id);
+            player.PlayerName = input.PlayerName;
+            _entities.Entry(player).State = EntityState.Modified;
+
+            _entities.SaveChanges();
+
+            ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+            return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
+        }
+
+        public ActionResult DeletePlayer(Models.Player input)
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
+            Changable = true;
+
+            Player player = _entities.Players.Find(input.Id);
+
+            bool exists = false;
+
+            foreach (TwoPlayer item in _entities.TwoPlayers)
+            {
+                try
+                {
+                    if (Convert.ToInt32(item.Player1) == input.Id)
+                    {
+                        exists = true;
+                    }
+                    if (Convert.ToInt32(item.Player2) == input.Id)
+                    {
+                        exists = true;
+                    }
+                }
+                catch { }
+            }
+            foreach (FourPlayer item in _entities.FourPlayers)
+            {
+                try
+                {
+                    string[] parts = item.Players1.Split(',');
+
+                    if (Convert.ToInt32(parts[0]) == input.Id)
+                    {
+                        exists = true;
+                    }
+                    if (Convert.ToInt32(parts[1]) == input.Id)
+                    {
+                        exists = true;
+                    }
+
+                    parts = item.Players2.Split(',');
+
+                    if (Convert.ToInt32(parts[0]) == input.Id)
+                    {
+                        exists = true;
+                    }
+                    if (Convert.ToInt32(parts[1]) == input.Id)
+                    {
+                        exists = true;
+                    }
+                }
+                catch { }
+            }
+
+            if (!exists)
+            {
+                _entities.Entry(player).State = EntityState.Deleted;
+                _entities.SaveChanges();
+            }
+
+            ViewData["CurrentPlayers"] = _entities.Players.ToList();
 
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
@@ -290,7 +382,11 @@ namespace PoolStats.Controllers
 
             TwoPlayer score = _entities.TwoPlayers.Where(p => p.ID == id).FirstOrDefault();
 
-            _entities.TwoPlayers.Remove(score);
+            try
+            {
+                _entities.TwoPlayers.Remove(score);
+            }
+            catch { }
 
             _entities.SaveChanges();
 
@@ -395,7 +491,11 @@ namespace PoolStats.Controllers
 
             FourPlayer score = _entities.FourPlayers.Where(p => p.ID == id).FirstOrDefault();
 
-            _entities.FourPlayers.Remove(score);
+            try
+            {
+                _entities.FourPlayers.Remove(score);
+            }
+            catch { }
 
             _entities.SaveChanges();
 
@@ -404,6 +504,33 @@ namespace PoolStats.Controllers
         }
 
         #endregion
+
+        public ActionResult SoundArchive(string locked)
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
+            Changable = Convert.ToBoolean(locked);
+
+            return View();
+        }
+
+        public ActionResult ImageArchive(string locked)
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
+            Changable = Convert.ToBoolean(locked);
+
+            return View();
+        }
+
+        public ActionResult BackupArchive(string locked)
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
+            Changable = Convert.ToBoolean(locked);
+
+            return View();
+        }
 
     }
 

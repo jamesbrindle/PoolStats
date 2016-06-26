@@ -1,0 +1,65 @@
+﻿@model PoolStats.Models.Player
+
+<script>
+    var el = document.getElementById('mainImage');
+    el.parentNode.removeChild(el);
+</script>
+
+@using (Html.BeginForm("SubmitChangePlayer", "Home", FormMethod.Post, new { @encType = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <br />
+        <h4>Modify Player</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <span class="control-label col-md-2" style="font-weight: bold;">Player Name</span>
+            <div class="col-md-10" style="padding-top: 10px;">
+                @Html.HiddenFor(model => Model.Id)
+                @Html.EditorFor(model => Model.PlayerName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => Model.PlayerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+                @using (Html.BeginForm("SubmitChangePlayer", "Home"))
+                {
+                    <input type="submit" value="Submit" class="btn btn-default" />
+                }
+
+            </div>
+        </div>
+    </div>
+}
+
+<br />
+
+<div>
+    @Html.ActionLink("Back to List", "CreatePlayers", new { id = "" })
+</div>
+<br />
+<br />
+
+<div class="form-horizontal">
+
+    @using (Html.BeginForm("DeletePlayer", "Home", FormMethod.Post, new { @encType = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => Model.Id)
+
+        <input style="color: red; font-size: 11px;" type="submit" value="Delete Player" class="btn btn-default" /><br /><br />
+            <p style="font-size: 11px;">* Delete will only be successfull if the player doesn't exist in any match.</p>
+    }
+
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

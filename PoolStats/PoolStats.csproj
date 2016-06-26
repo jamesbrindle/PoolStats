@@ -264,12 +264,17 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\add.png" />
+    <Content Include="Content\Images\backup.jpg" />
     <Content Include="Content\Images\delete.jpg" />
+    <Content Include="Content\Images\girl.jpg" />
     <Content Include="Content\Images\icons\poolball.ico" />
     <Content Include="Content\Images\locked.png" />
     <Content Include="Content\Images\mute.png" />
+    <Content Include="Content\Images\Pen-128.png" />
     <Content Include="Content\Images\poolball.png" />
+    <Content Include="Content\Images\slide3_narrow.jpg" />
     <Content Include="Content\Images\slide3_narrow.png" />
+    <Content Include="Content\Images\sound.jpg" />
     <Content Include="Content\Images\subtract.png" />
     <Content Include="Content\Images\unlocked.png" />
     <Content Include="Content\Images\unmute.png" />
@@ -348,6 +353,10 @@
     <Content Include="Views\Home\Create4p.cshtml" />
     <Content Include="Views\Home\Unlock.cshtml" />
     <Content Include="Views\Shared\_muter.cshtml" />
+    <Content Include="Views\Home\ModifyPlayer.cshtml" />
+    <Content Include="Views\Home\SoundArchive.cshtml" />
+    <Content Include="Views\Home\ImageArchive.cshtml" />
+    <Content Include="Views\Home\BackupArchive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

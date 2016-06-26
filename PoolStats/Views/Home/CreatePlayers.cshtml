@@ -50,10 +50,26 @@
     List<PoolStats.Models.Player> players = (List<PoolStats.Models.Player>)ViewData["CurrentPlayers"];
 }
 
-@foreach (var player in players)
-{
-    @Html.DisplayFor(p => player.PlayerName)<br />
-}
+<table>
+
+    @foreach (var player in players)
+    {
+
+        <tr>
+            <td style="height: 30px;">
+                @Html.DisplayFor(p => player.PlayerName) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                <a href='@Url.Action("ModifyPlayer", "Home", new { player.Id  })'>
+                    <img src='@Url.Content("~/Content/Images/Pen-128.png")' style="width: 18px; margin-top: -8px;" />
+                </a>
+            </td>
+        </tr>
+
+    }
+
+</table>
+
 
 <br />
 
