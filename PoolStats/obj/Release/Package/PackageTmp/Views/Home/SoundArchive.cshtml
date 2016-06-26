@@ -3,7 +3,6 @@
     var el = document.getElementById('mainImage').src = "/Content/Images/sound.jpg";
 </script>
 
-
 <audio id="sndCheer" src="http://poolstats.jb-net.co.uk/Content/Sounds/cheer.wav" autostart="false"></audio>
 <a onclick="PlayCheer()"></a>
 
@@ -23,8 +22,11 @@
     }
 </script>
 <br />
+
 <h4>Sound Archive</h4>
+
 <span style="font-size: 8pt;">Send me the links for the sounds you want me to add and I'll see what I can do.</span><br /><br />
+
 <p style="padding-top: 10px">
     <a href="#!" onclick='PlayCheer()'>Cheer</a>
 </p>
@@ -33,15 +35,16 @@
 </p>
 <br />
 <br />
+
 <div>
-@if (((bool)ViewData["Changable"]))
-{
-    @Html.ActionLink("Back to List", "Back", new { id = "" })
-}
-else
-{
-    @Html.ActionLink("Back to List", "BackLocked", new { id = "" })
-}
+    @if (((bool)ViewData["Changable"]))
+    {
+        @Html.ActionLink("Back to List", "Back", new { id = "" })
+    }
+    else
+    {
+        @Html.ActionLink("Back to List", "BackLocked", new { id = "" })
+    }
 </div>
 <br />
 <br />

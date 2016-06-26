@@ -29,6 +29,17 @@
 
 </head>
 <body>
+
+    @if (ViewData["Changable"] == null)
+    {
+        ViewData["Changable"] = false;
+    }
+
+    @if (ViewData["MutedSound"] == null)
+    {
+        ViewData["MutedSound"] = false;
+    }
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <table style="width: 100%; vertical-align: top;">
@@ -37,25 +48,17 @@
                         <p style="color:white; margin-left: -10px; vertical-align: top; padding-top: 6px; padding-left: 10px; font-size: 20px;">@Html.ActionLink("Belshaw's Pool Stats", "Index", null, new { @style = "color: white;" })</p>
                     </td>
                     <td style="vertical-align: top; padding-top: 8px;">
-                        <div style="margin-right: 14px;">
-                            @if (ViewData["Changable"] == null)
-                            {
-                                ViewData["Changable"] = false;
-                            }
+                        <div style="margin-right: 14px;">                            
 
-                            @if (ViewData["MutedSound"] == null)
-                            {
-                                ViewData["MutedSound"] = false;
-                            }
                             @if (((bool)ViewData["MutedSound"]))
                             {
-                                <a style="padding-right: 10px;" href='@Url.Action("Unmute", "Home", new { changeable = ((bool)ViewData["Changable"]) })'>
+                                <a style="padding-right: 10px;" href='@Url.Action("Unmute", "Home")'>
                                     <img src='@Url.Content("~/Content/Images/mute.png")' style="width: 26px; padding-top: 7px;" />
                                 </a>
                             }
                             else
                             {
-                                <a style="padding-right: 10px;" href='@Url.Action("Mute", "Home", new { changeable = ((bool)ViewData["Changable"]) })'>
+                                <a style="padding-right: 10px;" href='@Url.Action("Mute", "Home")'>
                                     <img src='@Url.Content("~/Content/Images/unmute.png")' style="width: 26px; padding-top: 7px;" />
                                 </a>
                             }
@@ -87,7 +90,7 @@
                                     <span class="icon-bar"></span>
                                 </button>
                             </div>
-                            <div class="navbar-collapse collapse">
+                            <div class="navbar-collapse collapse" style="margin-left: -20px;">
                                 <ul class="nav navbar-nav">
                                     <li>
                                         @if (((bool)ViewData["Changable"]))
@@ -126,13 +129,13 @@
                                         }
                                     </li>
                                     <li>
-                                        @Html.ActionLink("Sound Archive", "SoundArchive", new { locked = Convert.ToString(ViewData["Changable"]) })
+                                        @Html.ActionLink("Sound Archive", "SoundArchive")
                                     </li>
                                     <li>
-                                        @Html.ActionLink("Image Gallary", "ImageArchive", new { locked = Convert.ToString(ViewData["Changable"]) })
+                                        @Html.ActionLink("Image Gallary", "ImageArchive")
                                     </li>
                                     <li>
-                                        @Html.ActionLink("Score Backups", "BackupArchive", new { locked = Convert.ToString(ViewData["Changable"]) })
+                                        @Html.ActionLink("Score Backups", "BackupArchive")
 
                                     </li>
                                 </ul>

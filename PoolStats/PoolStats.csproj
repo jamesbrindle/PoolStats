@@ -273,7 +273,6 @@
     <Content Include="Content\Images\Pen-128.png" />
     <Content Include="Content\Images\poolball.png" />
     <Content Include="Content\Images\slide3_narrow.jpg" />
-    <Content Include="Content\Images\slide3_narrow.png" />
     <Content Include="Content\Images\sound.jpg" />
     <Content Include="Content\Images\subtract.png" />
     <Content Include="Content\Images\unlocked.png" />
@@ -346,13 +345,11 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Create2p.cshtml" />
     <Content Include="Views\Home\CreatePlayers.cshtml" />
     <Content Include="Views\Home\Create4p.cshtml" />
     <Content Include="Views\Home\Unlock.cshtml" />
-    <Content Include="Views\Shared\_muter.cshtml" />
     <Content Include="Views\Home\ModifyPlayer.cshtml" />
     <Content Include="Views\Home\SoundArchive.cshtml" />
     <Content Include="Views\Home\ImageArchive.cshtml" />

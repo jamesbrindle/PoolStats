@@ -3,7 +3,6 @@
     var el = document.getElementById('mainImage').src = "/Content/Images/backup.jpg";
 </script>
 
-
 <br />
 <h4>Score Backups</h4>
 
@@ -17,14 +16,9 @@
 <br />
 <br />
 <div>
-@if (((bool)ViewData["Changable"]))
-{
+
     @Html.ActionLink("Back to List", "Back", new { id = "" })
-}
-else
-{
-    @Html.ActionLink("Back to List", "BackLocked", new { id = "" })
-}
+
 </div>
 <br />
 <br />
