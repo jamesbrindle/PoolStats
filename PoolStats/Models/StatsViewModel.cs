@@ -11,5 +11,6 @@ namespace PoolStats.Models
         public int? TotalGames { get; set; }
         public double PercentageWon { get; set; }
         public double PercentageGamePlay { get; set; }
+        public double Points { get; set; }
     }
 }

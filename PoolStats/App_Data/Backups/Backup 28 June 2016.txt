@@ -1,0 +1,134 @@
+--- Pool Stats Backup [28/06/2016 22:45:55] ---
+
+
+- Player Stats -
+
+
+Player: Chris-Ib
+
+Total Games: 137
+
+Total Games Won: 54
+
+Total Games Lost: 83
+
+Percentage Winning: 39%
+
+Player Commitment: 49.28%
+
+
+Player: J. Bewwwy
+
+Total Games: 74
+
+Total Games Won: 51
+
+Total Games Lost: 23
+
+Percentage Winning: 69%
+
+Player Commitment: 26.62%
+
+
+Player: M. Bewwwy
+
+Total Games: 54
+
+Total Games Won: 24
+
+Total Games Lost: 30
+
+Percentage Winning: 44%
+
+Player Commitment: 19.42%
+
+
+Player: Jender Reassignment
+
+Total Games: 0
+
+Total Games Won: 0
+
+Total Games Lost: 0
+
+Percentage Winning: 0%
+
+Player Commitment: 0%
+
+
+Player: Test
+
+Total Games: 2
+
+Total Games Won: 2
+
+Total Games Lost: 0
+
+Percentage Winning: 100%
+
+Player Commitment: 0.72%
+
+
+Player: Test
+
+Total Games: 11
+
+Total Games Won: 8
+
+Total Games Lost: 3
+
+Percentage Winning: 73%
+
+Player Commitment: 3.96%
+
+
+
+- Two Player Matches -
+
+
+Player 1: Chris-Ib Score: 28 (53.85%)
+
+Player 2: M. Bewwwy Score: 24 (46.15%)
+
+
+Player 1: J. Bewwwy Score: 49 (68.06%)
+
+Player 2: Chris-Ib Score: 23 (31.94%)
+
+
+Player 1: M. Bewwwy Score: 0 (0%)
+
+Player 2: J. Bewwwy Score: 2 (100%)
+
+
+Player 1: Chris-Ib Score: 0 (0%)
+
+Player 2: Test Score: 2 (100%)
+
+
+Player 1: Chris-Ib Score: 3 (27.27%)
+
+Player 2: Test Score: 8 (72.73%)
+
+
+Player 1: Jender Reassignment Score: 0 (0%)
+
+Player 2: Chris-Ib Score: 0 (0%)
+
+
+Player 1: Jender Reassignment Score: 0 (0%)
+
+Player 2: Chris-Ib Score: 0 (0%)
+
+
+
+- Four Player Matches -
+
+
+Players 1: Chris-Ib & Bwindle Score: 0 (0%)
+
+Players 2: J. Bewwwy & Test Score: 0 (0%)
+
+
+
+

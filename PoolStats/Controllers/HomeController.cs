@@ -2,8 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace PoolStats.Controllers
@@ -84,6 +88,35 @@ namespace PoolStats.Controllers
                 {
                     ViewData["MutedSound"] = false;
                     CookieStore.SetCookie("muted", "false", new TimeSpan(2, 0, 0, 0));
+                }
+            }
+        }
+
+        protected String PostUser
+        {
+            get
+            {
+                if (CookieStore.GetCookie("postUser") == null) {
+                    ViewData["PostUser"] = "";
+                    return "";
+                }
+                else
+                {
+                    ViewData["PostUser"] = CookieStore.GetCookie("postUser");
+                    return (string)ViewData["PostUser"];
+                }
+            }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    ViewData["PostUser"] = value;
+                    CookieStore.SetCookie("postUser", value, new TimeSpan(99, 0, 0, 0));
+                }
+                else
+                {
+                    ViewData["PostUser"] = value;
+                    CookieStore.SetCookie("postUser", value, new TimeSpan(99, 0, 0, 0));
                 }
             }
         }
@@ -227,7 +260,7 @@ namespace PoolStats.Controllers
 
             return View(_entities.Players.Find(id));
         }
-        
+
         public ActionResult SubmitPlayer(Models.Player input)
         {
             AlwaysUpdate();
@@ -563,11 +596,34 @@ namespace PoolStats.Controllers
             var mute = MutedSound;
             var changable = Changable;
 
-            return View();
+            List<Post> imageList = _entities.Posts.Where(p => p.FileName != null && p.FileName != "").ToList();
+            List<Post> reverseImageList = new List<Post>();
+
+            for (int i = imageList.Count() - 1; i >= 0; i--)
+            {
+                reverseImageList.Add(imageList.ElementAt(i));
+            }
+
+            if (reverseImageList.Count > 200)
+            {
+                return View(reverseImageList.GetRange(0, 200));
+            }
+            else
+            {
+                return View(reverseImageList);
+            }
         }
 
         public ActionResult BackupArchive()
         {
+
+#if DEBUG
+            string backupDir = "file:\\H:\\Documents\\Work\\Repositories\\PoolStats\\PoolStats\\Content\\Backups";
+#else
+            string backupDir = "file:\\C:\\inetpub\\wwwroot\\poolstats\\Content\\Backups";
+#endif
+            ViewData["BackupDir"] = backupDir;
+
             AlwaysUpdate();
             var mute = MutedSound;
             var changable = Changable;
@@ -576,6 +632,125 @@ namespace PoolStats.Controllers
         }
 
         #endregion
+
+        #region Posts Related
+
+        public ActionResult Posts()
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
+            var changable = Changable;
+            string postUser = PostUser;
+
+            if (!String.IsNullOrEmpty(PostUser))
+                ViewData["PlayerName"] = GetPlayerNameFromID(Convert.ToInt32(postUser));
+
+            List<Post> reverseList = new List<Post>();
+
+            for (int i = _entities.Posts.Count() - 1; i >= 0; i--)
+            {
+                reverseList.Add(_entities.Posts.ToList().ElementAt(i));
+            }
+
+            if (reverseList.Count > 200)
+            {
+                return View("Posts", Tuple.Create(_entities.Players.ToList(), reverseList.GetRange(0, 200)));
+            }
+            else
+            {
+                return View("Posts", Tuple.Create(_entities.Players.ToList(), reverseList));
+            }
+        }
+
+        public ActionResult SubmitPost(string message, string playerId, HttpPostedFileWrapper file)
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
+            var changable = Changable;
+            PostUser = playerId;
+
+            if (!String.IsNullOrEmpty(PostUser))
+                ViewData["PlayerName"] = GetPlayerNameFromID(Convert.ToInt32(playerId));
+            
+            if (string.IsNullOrEmpty(message) && file == null)
+            {
+                return View("Posts", Tuple.Create(_entities.Players.ToList(), _entities.Posts.ToList()));
+            }
+            else
+            {
+                Post post = new Post();
+
+                post.PlayerName = GetPlayerNameFromID(Convert.ToInt32(playerId));
+                post.Message = String.IsNullOrEmpty(message) ? "" : message;
+                post.PostDate = DateTime.Now;
+
+                int id = 0;
+
+                try
+                {
+                    id = _entities.Posts.Max(p => p.ID) + 1;
+                }
+                catch { }
+
+                post.ID = id;
+
+                if (file != null)
+                {
+                    post.FileName = id + ".jpg";
+                    string imagePath = Server.MapPath(Url.Content("~/Content/Posts/Images/")) + post.FileName;
+
+                    WebImage img = new WebImage(file.InputStream);
+                    img.Resize(600, (600 * img.Height / img.Width), true, false);
+                    img.Save(imagePath);
+                }
+
+                _entities.Posts.Add(post);
+                _entities.Entry(post).State = EntityState.Added;
+                _entities.SaveChanges();
+
+                List<Post> reverseList = new List<Post>();
+
+                for (int i = _entities.Posts.Count() - 1; i >= 0; i--)
+                {
+                    reverseList.Add(_entities.Posts.ToList().ElementAt(i));
+                }
+
+                if (reverseList.Count > 200)
+                {
+                    return View("Posts", Tuple.Create(_entities.Players.ToList(), reverseList.GetRange(0, 200)));
+                }
+                else
+                {
+                    return View("Posts", Tuple.Create(_entities.Players.ToList(), reverseList));
+                }
+            }
+        }
+
+        public static Image Resize(Image image, int maxWidth = 0, int maxHeight = 0)
+        {
+            if (maxWidth == 0)
+                maxWidth = image.Width;
+            if (maxHeight == 0)
+                maxHeight = image.Height;
+
+            var ratioX = (double)maxWidth / image.Width;
+            var ratioY = (double)maxHeight / image.Height;
+            var ratio = Math.Min(ratioX, ratioY);
+
+            var newWidth = (int)(image.Width * ratio);
+            var newHeight = (int)(image.Height * ratio);
+
+            var newImage = new Bitmap(newWidth, newHeight);
+            Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
+            return newImage;
+        }
+
+        #endregion
+
+        public string GetPlayerNameFromID(int id)
+        {
+            return _entities.Players.SingleOrDefault(p => p.Id == id).PlayerName;
+        }
     }
 
     public class CookieStore

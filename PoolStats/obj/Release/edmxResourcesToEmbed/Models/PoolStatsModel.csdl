@@ -40,5 +40,24 @@
     <EntitySet Name="FourPlayers" EntityType="Self.FourPlayer" />
     <EntitySet Name="Pins" EntityType="Self.Pin" />
     <EntitySet Name="TwoPlayers" EntityType="Self.TwoPlayer" />
+    <EntitySet Name="Posts" EntityType="PoolStatsDBModel.Post" />
+    <FunctionImport Name="SplitString" IsComposable="true" ReturnType="Collection(PoolStatsDBModel.SplitString_Result)">
+      <Parameter Name="string" Mode="In" Type="String" />
+      <Parameter Name="delim" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
+  <EntityType Name="Post">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="PlayerName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PostDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="FileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <ComplexType Name="SplitString_Result">
+    <Property Type="String" Name="Value" Nullable="false" MaxLength="4000" />
+    <Property Type="Int32" Name="Index" Nullable="false" />
+  </ComplexType>
 </Schema>

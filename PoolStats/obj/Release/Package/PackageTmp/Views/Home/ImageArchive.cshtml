@@ -1,4 +1,5 @@
-﻿
+﻿@model List<PoolStats.Models.Post>
+
 <script>
     var el = document.getElementById('mainImage').src = "/Content/Images/girl.jpg";
 </script>
@@ -12,13 +13,19 @@
 <h4>Image Gallary</h4>
 
 <br />
-<p style="font-size:20pt; text-align: center;">
 
-    Coming Soon!
+@Html.ActionLink("Back to List", "Back", new { id = "" })
 
-</p>
+<br /><br />
 
-<br />
+@{
+    foreach (PoolStats.Models.Post post in Model)
+    {
+        <img src="@Url.Content("/Content/Posts/Images/" + post.FileName)" alt="Image" class="img-responsive" style="text-align: center;" />
+        <br />
+    }
+}
+
 <br />
 <div>
 

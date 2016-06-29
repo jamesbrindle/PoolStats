@@ -1,0 +1,105 @@
+﻿
+<script>
+    var el = document.getElementById('mainImage');
+    el.parentNode.removeChild(el);
+</script>
+
+@{
+    ViewBag.Title = "Posts";
+    @model Tuple<List<PoolStats.Models.Player>, List<PoolStats.Models.Post>>
+}
+
+
+@if (ViewData["Changable"] == null)
+{
+    ViewData["Changable"] = false;
+}
+
+<br />
+<h4>Posts</h4>
+
+@using (Html.BeginForm("SubmitPost", "Home", FormMethod.Post, new { @encType = "multipart/form-data" }))
+{
+
+    <div class="CollaspableDiv">
+        <p class="heading spanButton">
+            <span style="color: cornflowerblue">Create Post</span>
+        </p>
+
+
+        <div class="content">
+            @if ((bool)ViewData["Changable"])
+            {
+                if (String.IsNullOrEmpty((string)ViewData["PostUser"]))
+                {
+                    <p>Post Player:</p>@Html.DropDownList("playerid", new SelectList(Model.Item1, "Id", "PlayerName"), new { @class = "form-control", @style = "width: 100%;" })
+                    <p style="font-size: 9pt; padding-top: 10px; margin-bottom: -10px; color: red;">*Once you've posted as this user it will be saved for next time and can only be changed by clearing your cookies</p>
+                }
+                else
+                {
+                    string playerID = (string)ViewData["PostUser"];
+                    string playerName = (string)ViewData["PlayerName"];
+
+                    @Html.Hidden("playerId", playerID);
+                    <p>Post Player:</p>
+                    <p style="font-size: 12pt; font-weight: bold; margin-bottom: -10px; ">@Html.DisplayFor(p => playerName, new { @class = "form-control", @style = "width: 100%;" })</p>
+
+                }
+
+                <br />
+                <p>Message:</p>@Html.TextArea("message", new { @class = "form-control", @style = "width: 100%;" })
+                <br />
+                <p>Upload Image:</p>
+                <input type="file" name="file" id="file" style="width: 100%;" /><br />
+
+                <input type="submit" value="Create" class="btn btn-default" />
+            }
+            else
+            {
+                <br />
+                <span>You must unlock (top right) in order to post content.</span>
+                <br />
+                <br />
+            }
+        </div>
+
+    </div>
+
+}
+<br />
+
+<div>
+    @Html.ActionLink("Back to List", "Back", new { id = "" })
+</div>
+<br />
+
+@{
+    foreach (PoolStats.Models.Post post in Model.Item2)
+    {
+        <span style="font-style: italic;">@Html.DisplayFor(p => post.PostDate)</span>
+        <br />
+        <br />
+        if (!String.IsNullOrEmpty(post.FileName))
+        {
+            <img src="@Url.Content("/Content/Posts/Images/" + post.FileName)" alt="Image" class="img-responsive" style="text-align: center;" />
+            <br />
+        }
+        if (!String.IsNullOrEmpty(post.FileName))
+        {
+            @Html.DisplayFor(p => post.Message)<br />
+        }
+        else
+        {
+            <p>@Html.DisplayFor(p => post.Message)<br /></p>
+        }
+
+        <p style="margin-top: 7px; font-style: italic;">Posted By: <span style="font-weight: bold;">@Html.DisplayFor(p => post.PlayerName)</span></p>
+        <hr />
+    }
+}
+
+@Html.ActionLink("Back to List", "Back", new { id = "" })
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

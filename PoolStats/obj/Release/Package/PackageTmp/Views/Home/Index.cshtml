@@ -85,9 +85,10 @@
         double percentage = ((double)statsItem.GamesWon / (double)statsItem.TotalGames) * 100;
         statsItem.PercentageWon = percentage;
         statsItem.PercentageGamePlay = (double)statsItem.TotalGames / (double)totalAllGames * 100;
+        statsItem.Points = (double)statsItem.GamesWon + ((double)statsItem.GamesLost * 0.5);
     }
 
-    stats = stats.OrderByDescending(x => x.PercentageWon).ThenByDescending(x => x.PercentageGamePlay).ToList();
+    stats = stats.OrderByDescending(x => x.PercentageWon).ThenByDescending(x => x.Points).ThenByDescending(x => x.PercentageGamePlay).ToList();
 }
 
 <audio id="sndCheer" src="http://poolstats.jb-net.co.uk/Content/Sounds/cheer.wav" autostart="false"></audio>
@@ -162,6 +163,7 @@
         {
             string percentage = stat.PercentageWon.ToString("#.##") + "%";
             string percentageGamePlay = stat.PercentageGamePlay.ToString("#.##") + "%";
+            string points = stat.Points.ToString();
 
             if (Double.IsNaN(stat.PercentageWon) || stat.PercentageWon == 0)
             {
@@ -213,9 +215,10 @@
                     </span><br /><br />
                 }
             }
-
+            
             <span>Percentage Winning: </span><span style="color: red;">@Html.DisplayFor(s => percentage)</span><br />
-            <span>Player Commitment: </span><span style="color: blue;">@Html.DisplayFor(s => percentageGamePlay) </span><br />
+            <span>Total Points: </span><span style="color: red;">@Html.DisplayFor(s => points) </span><br />
+            <span>Player Commitment: </span><span style="color: blue;">@Html.DisplayFor(s => percentageGamePlay) </span><br />            
             <span>Total Matches: @Html.DisplayFor(s => stat.TotalGames). Total Won: @Html.DisplayFor(s => stat.GamesWon) </span><br /><br />
 
             i++;
@@ -224,6 +227,7 @@
     </p>
 
     <p style="font-size: 9pt;">*Player Commitment = Percentage of games played of all games.</p>
+    <p style="font-size: 9pt;">*Total Points = 1 point for winning, 1/2 point for losing.</p>
 </div>
 
 <div class="row" style="padding-left: 9px; padding-right: 20px; margin-top: -10px;">

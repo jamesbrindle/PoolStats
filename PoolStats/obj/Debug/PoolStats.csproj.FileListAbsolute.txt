@@ -160,3 +160,4 @@ H:\Documents\Work\Repositories\PoolStats\PoolStats\bin\Microsoft.Owin.Security.T
 H:\Documents\Work\Repositories\PoolStats\PoolStats\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 H:\Documents\Work\Repositories\PoolStats\PoolStats\obj\Debug\PoolStats.dll
 H:\Documents\Work\Repositories\PoolStats\PoolStats\obj\Debug\PoolStats.pdb
+H:\Documents\Work\Repositories\PoolStats\PoolStats\obj\Debug\PoolStats.csprojResolveAssemblyReference.cache

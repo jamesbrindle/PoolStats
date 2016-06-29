@@ -12,6 +12,8 @@ namespace PoolStats.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class PoolStatsDB_Entities : DbContext
     {
@@ -29,5 +31,20 @@ namespace PoolStats.Models
         public virtual DbSet<FourPlayer> FourPlayers { get; set; }
         public virtual DbSet<Pin> Pins { get; set; }
         public virtual DbSet<TwoPlayer> TwoPlayers { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
+    
+        [DbFunction("PoolStatsDB_Entities", "SplitString")]
+        public virtual IQueryable<SplitString_Result> SplitString(string @string, string delim)
+        {
+            var stringParameter = @string != null ?
+                new ObjectParameter("string", @string) :
+                new ObjectParameter("string", typeof(string));
+    
+            var delimParameter = delim != null ?
+                new ObjectParameter("delim", delim) :
+                new ObjectParameter("delim", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<SplitString_Result>("[PoolStatsDB_Entities].[SplitString](@string, @delim)", stringParameter, delimParameter);
+        }
     }
 }

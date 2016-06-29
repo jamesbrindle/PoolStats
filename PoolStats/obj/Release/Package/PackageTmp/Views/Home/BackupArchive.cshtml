@@ -7,11 +7,26 @@
 <h4>Score Backups</h4>
 
 <br />
-<p style="font-size:20pt; text-align: center;">
 
-    Coming Soon!
+<p>Reverse Chronological Order...</p><br />
 
-</p>
+@{ 
+    string backupDir = (string)ViewData["BackupDir"];
+
+    FileInfo[] Files = Directory.GetFiles(new Uri(backupDir).LocalPath, "*.txt")
+                 .Select(x => new FileInfo(x))
+                 .OrderByDescending(x => x.CreationTime)
+                 .Take(20)
+                 .ToArray();
+
+    foreach (FileInfo file in Files)
+    {
+        string path = "http://poolstats.jb-net.co.uk/Content/Backups/" + file.Name.Replace(" ", "%20");
+        string fileName = file.Name.Replace(".txt", "");
+
+        <p><a href=@{@path} target="_blank">@Html.DisplayFor(a => fileName)</a></p>
+    }
+}
 
 <br />
 <br />

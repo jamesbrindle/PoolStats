@@ -206,6 +206,12 @@
     <Compile Include="Models\FourPlayer.cs">
       <DependentUpon>PoolStatsModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Post.cs">
+      <DependentUpon>PoolStatsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SplitString_Result.cs">
+      <DependentUpon>PoolStatsModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\StatsViewModel.cs" />
     <Compile Include="Models\FourPlayerViewModels.cs" />
     <Compile Include="Models\Pin.cs">
@@ -234,6 +240,7 @@
     <Compile Include="Models\TwoPlayer.cs">
       <DependentUpon>PoolStatsModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PostsViewModel.cs" />
     <Compile Include="Models\TwoPlayerViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -277,6 +284,7 @@
     <Content Include="Content\Images\subtract.png" />
     <Content Include="Content\Images\unlocked.png" />
     <Content Include="Content\Images\unmute.png" />
+    <Content Include="Content\jquery-3.0.0.js" />
     <Content Include="Content\Sounds\boo.wav" />
     <Content Include="Content\Sounds\cheer.wav" />
     <Content Include="favicon-16x16.png" />
@@ -354,6 +362,7 @@
     <Content Include="Views\Home\SoundArchive.cshtml" />
     <Content Include="Views\Home\ImageArchive.cshtml" />
     <Content Include="Views\Home\BackupArchive.cshtml" />
+    <Content Include="Views\Home\Posts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -369,6 +378,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
