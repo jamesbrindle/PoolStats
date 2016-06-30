@@ -29,7 +29,9 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="PlayerName" Type="varchar(max)" />
+          <Property Name="PlayerName" Type="varchar(max)" Nullable="false" />
+          <Property Name="Image" Type="nvarchar(max)" />
+          <Property Name="Male" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Posts">
           <Key>
@@ -38,7 +40,7 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="PlayerName" Type="varchar(max)" Nullable="false" />
           <Property Name="PostDate" Type="datetime" Nullable="false" />
-          <Property Name="Message" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Message" Type="varchar(max)" Nullable="false" />
           <Property Name="FileName" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="TwoPlayer">
@@ -84,7 +86,9 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="PlayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PlayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Male" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="FourPlayer">
           <Key>
@@ -148,6 +152,8 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
           <EntitySetMapping Name="Players">
             <EntityTypeMapping TypeName="PoolStatsDBModel.Player">
               <MappingFragment StoreEntitySet="Players">
+                <ScalarProperty Name="Male" ColumnName="Male" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlayerName" ColumnName="PlayerName" />
               </MappingFragment>

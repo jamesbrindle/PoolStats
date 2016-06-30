@@ -261,7 +261,7 @@ namespace PoolStats.Controllers
             return View(_entities.Players.Find(id));
         }
 
-        public ActionResult SubmitPlayer(Models.Player input)
+        public ActionResult SubmitPlayer(Models.Player input, HttpPostedFileWrapper file)
         {
             AlwaysUpdate();
             var mute = MutedSound;
@@ -271,13 +271,24 @@ namespace PoolStats.Controllers
 
             input.Id = max + 1;
 
+            if (file != null)
+            {
+                input.Image = input.Id + ".jpg";
+                string imagePath = Server.MapPath(Url.Content("~/Content/ProfileImages/")) + input.Image;
+
+                WebImage img = CropImage(new WebImage(file.InputStream), new decimal(1));
+
+                img.Resize(300, (300 * img.Height / img.Width), true, false);
+                img.Save(imagePath);
+            }
+
             _entities.Players.Add(input);
             _entities.SaveChanges();
 
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
-        public ActionResult SubmitChangePlayer(Models.Player input)
+        public ActionResult SubmitChangePlayer(Models.Player input, HttpPostedFileWrapper file)
         {
             AlwaysUpdate();
             var mute = MutedSound;
@@ -285,8 +296,22 @@ namespace PoolStats.Controllers
 
             Player player = _entities.Players.Find(input.Id);
             player.PlayerName = input.PlayerName;
-            _entities.Entry(player).State = EntityState.Modified;
+            player.Male = input.Male;
+            
+            if (file != null)
+            {
+                input.Image = input.Id + ".jpg";
+                string imagePath = Server.MapPath(Url.Content("~/Content/ProfileImages/")) + input.Image;
 
+                WebImage img = CropImage(new WebImage(file.InputStream), new decimal(1));
+
+                img.Resize(300, (300 * img.Height / img.Width), true, false);
+                img.Save(imagePath);
+
+                player.Image = input.Image;
+            }
+
+            _entities.Entry(player).State = EntityState.Modified;
             _entities.SaveChanges();
 
             ViewData["CurrentPlayers"] = _entities.Players.ToList();
@@ -747,10 +772,40 @@ namespace PoolStats.Controllers
 
         #endregion
 
+        #region Misc
+
         public string GetPlayerNameFromID(int id)
         {
             return _entities.Players.SingleOrDefault(p => p.Id == id).PlayerName;
         }
+
+        public static WebImage CropImage(WebImage image, decimal targetRatio)
+        {
+            decimal currentImageRatio = image.Width / (decimal)image.Height;
+            int difference;
+
+            //image is wider than targeted
+            if (currentImageRatio > targetRatio)
+            {
+                int targetWidth = Convert.ToInt32(Math.Floor(targetRatio * image.Height));
+                difference = image.Width - targetWidth;
+                int left = Convert.ToInt32(Math.Floor(difference / (decimal)2));
+                int right = Convert.ToInt32(Math.Ceiling(difference / (decimal)2));
+                image.Crop(0, left, 0, right);
+            }
+            //image is higher than targeted
+            else if (currentImageRatio < targetRatio)
+            {
+                int targetHeight = Convert.ToInt32(Math.Floor(image.Width / targetRatio));
+                difference = image.Height - targetHeight;
+                int top = Convert.ToInt32(Math.Floor(difference / (decimal)2));
+                int bottom = Convert.ToInt32(Math.Ceiling(difference / (decimal)2));
+                image.Crop(top, 0, bottom, 0);
+            }
+            return image;
+        }
+
+        #endregion
     }
 
     public class CookieStore

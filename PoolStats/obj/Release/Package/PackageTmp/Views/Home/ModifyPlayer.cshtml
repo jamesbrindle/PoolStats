@@ -17,11 +17,38 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            <span class="control-label col-md-2" style="font-weight: bold;">Player Name</span>
-            <div class="col-md-10" style="padding-top: 10px;">
+            <div class="col-md-10">
+                <span class="control-label col-md-2" style="font-weight: bold; margin-left: -14px">Player Name</span><br /><br />
                 @Html.HiddenFor(model => Model.Id)
-                @Html.EditorFor(model => Model.PlayerName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => Model.PlayerName, new { htmlAttributes = new { @class = "form-control" } })<br />
                 @Html.ValidationMessageFor(model => Model.PlayerName, "", new { @class = "text-danger" })
+
+                <span>Male?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>@Html.CheckBoxFor(model => Model.Male, new { htmlAttributes = new { @class = "form-control" } })<br /><br />
+
+                @{                    
+                    string defMessage = Model.Image == null ? " (Default)" : "";
+                }
+
+                <span class="control-label col-md-2" style="font-weight: bold; margin-left: -14px;">Current Profile Picture @defMessage</span><br /><br />
+
+                @if (Model.Image == null)
+                {
+                    if (Model.Male)
+                    {
+                        <img src="@Url.Content("/Content/Images/default_profile_male.jpg")" alt="Image" class="img-responsive" style="text-align: center; width: 50%" /><br />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("/Content/Images/default_profile_female.jpg")" alt="Image" class="img-responsive" style="text-align: center; width: 50%" /><br />
+                    }
+                }
+                else
+                {
+                    <img src="@Url.Content("/Content/ProfileImages/" + Model.Id + ".jpg")" alt="Image" class="img-responsive" style="text-align: center; width: 50%" /><br />
+                }
+
+                <span class="control-label col-md-2" style="font-weight: bold; margin-left: -14px;">Change Profile Picture</span><br /><br />
+                <input type="file" name="file" id="file" style="width: 100%;" /><br />
             </div>
         </div>
 
@@ -53,7 +80,7 @@
         @Html.HiddenFor(model => Model.Id)
 
         <input style="color: red; font-size: 11px;" type="submit" value="Delete Player" class="btn btn-default" /><br /><br />
-            <p style="font-size: 11px;">* Delete will only be successfull if the player doesn't exist in any match.</p>
+        <p style="font-size: 11px;">* Delete will only be successfull if the player doesn't exist in any match.</p>
     }
 
 </div>

@@ -5,7 +5,9 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" />
-    <Property Name="PlayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PlayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Male" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="FourPlayer">
     <Key>

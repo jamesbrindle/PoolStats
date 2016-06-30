@@ -24,7 +24,9 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" Nullable="false" />
-    <Property Name="PlayerName" Type="varchar(max)" />
+    <Property Name="PlayerName" Type="varchar(max)" Nullable="false" />
+    <Property Name="Image" Type="nvarchar(max)" />
+    <Property Name="Male" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Posts">
     <Key>
@@ -33,7 +35,7 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="PlayerName" Type="varchar(max)" Nullable="false" />
     <Property Name="PostDate" Type="datetime" Nullable="false" />
-    <Property Name="Message" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Message" Type="varchar(max)" Nullable="false" />
     <Property Name="FileName" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="TwoPlayer">

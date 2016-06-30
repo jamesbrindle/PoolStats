@@ -272,6 +272,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\add.png" />
     <Content Include="Content\Images\backup.jpg" />
+    <Content Include="Content\Images\default_profile_female.jpg" />
+    <Content Include="Content\Images\default_profile_male.jpg" />
     <Content Include="Content\Images\delete.jpg" />
     <Content Include="Content\Images\girl.jpg" />
     <Content Include="Content\Images\icons\poolball.ico" />

@@ -16,5 +16,7 @@ namespace PoolStats.Models
     {
         public int Id { get; set; }
         public string PlayerName { get; set; }
+        public string Image { get; set; }
+        public bool Male { get; set; }
     }
 }
