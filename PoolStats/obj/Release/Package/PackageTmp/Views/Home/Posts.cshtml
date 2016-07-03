@@ -4,6 +4,86 @@
     el.parentNode.removeChild(el);
 </script>
 
+
+<script>
+    var loadFile = function (event) {
+        var prevDiv = document.getElementById('imgPreviewDiv');
+        prevDiv.setAttribute("style", "text-align: center; width: 100%; display: block;");
+
+        var output = document.getElementById('prevImage');
+        output.src = URL.createObjectURL(event.target.files[0]);
+    };
+
+    function rotateLeft() {
+        var output = document.getElementById('prevImage');
+        var rotateVal = document.getElementById("rotateVal");
+
+        if (rotateVal.value == '0') {
+            output.setAttribute("style", "-moz-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); -o-transform:rotate(-90deg); -ms-transform:rotate(-90deg); width: 200px;");
+            rotateVal.value = '-90';
+        }
+        else if (rotateVal.value == "-90") {
+            output.setAttribute("style", "-moz-transform:rotate(-180deg); -webkit-transform:rotate(-180deg); -o-transform:rotate(-180deg); -ms-transform:rotate(-180deg); width: 200px;");
+            rotateVal.value = '-180';
+        }
+        else if (rotateVal.value == "-180") {
+            output.setAttribute("style", "-moz-transform:rotate(-270deg); -webkit-transform:rotate(-270deg); -o-transform:rotate(-270deg); -ms-transform:rotate(-270deg); width: 200px;");
+            rotateVal.value = '-270';
+        }
+        else if (rotateVal.value == "-270") {
+            output.setAttribute("style", "-moz-transform:rotate(0deg); -webkit-transform:rotate(0deg); -o-transform:rotate(0deg); -ms-transform:rotate(0deg); width: 200px;");
+            rotateVal.value = '0';
+        }
+        else if (rotateVal.value == "90") {
+            output.setAttribute("style", "-moz-transform:rotate(0deg); -webkit-transform:rotate(0deg); -o-transform:rotate(0eg); -ms-transform:rotate(0deg); width: 200px;");
+            rotateVal.value = '0';
+        }
+        else if (rotateVal.value == "180") {
+            output.setAttribute("style", "-moz-transform:rotate(90deg); -webkit-transform:rotate(90deg); -o-transform:rotate(90deg); -ms-transform:rotate(90deg); width: 200px;");
+            rotateVal.value = '90';
+        }
+        else if (rotateVal.value == "270") {
+            output.setAttribute("style", "-moz-transform:rotate(180deg); -webkit-transform:rotate(180deg); -o-transform:rotate(180deg); -ms-transform:rotate(180deg); width: 200px;");
+            rotateVal.value = '180';
+        }
+    }
+
+    function rotateRight() {
+        var output = document.getElementById('prevImage');
+        var rotateVal = document.getElementById("rotateVal");
+
+        if (rotateVal.value == '0') {
+            output.setAttribute("style", "-moz-transform:rotate(90deg); -webkit-transform:rotate(90deg); -o-transform:rotate(90deg); -ms-transform:rotate(90deg); width: 200px;");
+            rotateVal.value = '90';
+        }
+        else if (rotateVal.value == "90") {
+            output.setAttribute("style", "-moz-transform:rotate(180deg); -webkit-transform:rotate(180deg); -o-transform:rotate(180deg); -ms-transform:rotate(180deg); width: 200px;");
+            rotateVal.value = '180';
+        }
+        else if (rotateVal.value == "180") {
+            output.setAttribute("style", "-moz-transform:rotate(270deg); -webkit-transform:rotate(270deg); -o-transform:rotate(270deg); -ms-transform:rotate(270deg); width: 200px;");
+            rotateVal.value = '270';
+        }
+        else if (rotateVal.value == "270") {
+            output.setAttribute("style", "-moz-transform:rotate(0deg); -webkit-transform:rotate(0deg); -o-transform:rotate(0deg); -ms-transform:rotate(0deg); width: 200px;");
+            rotateVal.value = '0';
+        }
+        else if (rotateVal.value == "-90") {
+            output.setAttribute("style", "-moz-transform:rotate(0deg); -webkit-transform:rotate(0deg); -o-transform:rotate(0eg); -ms-transform:rotate(0deg); width: 200px;");
+            rotateVal.value = '0';
+        }
+        else if (rotateVal.value == "-180") {
+            output.setAttribute("style", "-moz-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); -o-transform:rotate(-90deg); -ms-transform:rotate(-90deg); width: 200px;");
+            rotateVal.value = '-90';
+        }
+        else if (rotateVal.value == "270") {
+            output.setAttribute("style", "-moz-transform:rotate(-180deg); -webkit-transform:rotate(-180deg); -o-transform:rotate(-180deg); -ms-transform:rotate(-180deg); width: 200px;");
+            rotateVal.value = '-180';
+        }
+    }
+
+</script>
+
 @{
     ViewBag.Title = "Posts";
     @model Tuple<List<PoolStats.Models.Player>, List<PoolStats.Models.Post>>
@@ -49,8 +129,14 @@
                 <br />
                 <p>Message:</p>@Html.TextArea("message", new { @class = "form-control", @style = "width: 100%;" })
                 <br />
-                <p>Upload Image:</p>
-                <input type="file" name="file" id="file" style="width: 100%;" /><br />
+                <p>Upload Image (Optional):</p>
+                <input type="file" name="file" id="file" style="width: 100%;" accept=".jpg,.jpeg,.png,image/pjpeg,image/jpeg,image/pjpeg,image/jpeg,image/png" onchange="loadFile(event)" /><br />
+
+                <div id="imgPreviewDiv" style="text-align: center; width: 100%; display: none;">
+                    <a href="#" onclick="rotateLeft()">Rotate Left</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="rotateRight()">Rotate Right</a><br /><br />
+                    <input type="hidden" id="rotateVal" name="rotateVal" value="0" />
+                    <img id="prevImage" src="#" style="width: 200px" /><br /><br />
+                </div>
 
                 <input type="submit" value="Create" class="btn btn-default" />
             }
@@ -81,7 +167,8 @@
         <br />
         if (!String.IsNullOrEmpty(post.FileName))
         {
-            <img src="@Url.Content("/Content/Posts/Images/" + post.FileName)" alt="Image" class="img-responsive" style="text-align: center;" />
+            <img src="@Url.Content("/Content/Posts/Images/" + post.FileName)" 
+                 alt="Image" class="img-responsive" style="text-align: center; border-style: none; border-color: white; border-width: 0px;" />
             <br />
         }
         if (!String.IsNullOrEmpty(post.FileName))

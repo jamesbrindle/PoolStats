@@ -261,7 +261,7 @@ namespace PoolStats.Controllers
             return View(_entities.Players.Find(id));
         }
 
-        public ActionResult SubmitPlayer(Models.Player input, HttpPostedFileWrapper file)
+        public ActionResult SubmitPlayer(Models.Player input, HttpPostedFileWrapper file, string rotateVal)
         {
             AlwaysUpdate();
             var mute = MutedSound;
@@ -278,8 +278,10 @@ namespace PoolStats.Controllers
 
                 WebImage img = CropImage(new WebImage(file.InputStream), new decimal(1));
 
+                img = RotateImage(img, rotateVal);
                 img.Resize(300, (300 * img.Height / img.Width), true, false);
-                img.Save(imagePath);
+
+                img.Save(imagePath, "jpg", true);
             }
 
             _entities.Players.Add(input);
@@ -288,7 +290,7 @@ namespace PoolStats.Controllers
             return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
         }
 
-        public ActionResult SubmitChangePlayer(Models.Player input, HttpPostedFileWrapper file)
+        public ActionResult SubmitChangePlayer(Models.Player input, HttpPostedFileWrapper file, string rotateVal)
         {
             AlwaysUpdate();
             var mute = MutedSound;
@@ -305,8 +307,10 @@ namespace PoolStats.Controllers
 
                 WebImage img = CropImage(new WebImage(file.InputStream), new decimal(1));
 
+                img = RotateImage(img, rotateVal);
                 img.Resize(300, (300 * img.Height / img.Width), true, false);
-                img.Save(imagePath);
+
+                img.Save(imagePath, "jpg", true);
 
                 player.Image = input.Image;
             }
@@ -687,7 +691,7 @@ namespace PoolStats.Controllers
             }
         }
 
-        public ActionResult SubmitPost(string message, string playerId, HttpPostedFileWrapper file)
+        public ActionResult SubmitPost(string message, string playerId, HttpPostedFileWrapper file, string rotateVal)
         {
             AlwaysUpdate();
             var mute = MutedSound;
@@ -725,8 +729,11 @@ namespace PoolStats.Controllers
                     string imagePath = Server.MapPath(Url.Content("~/Content/Posts/Images/")) + post.FileName;
 
                     WebImage img = new WebImage(file.InputStream);
+
+                    img = RotateImage(img, rotateVal);
                     img.Resize(600, (600 * img.Height / img.Width), true, false);
-                    img.Save(imagePath);
+
+                    img.Save(imagePath, "jpg", true);
                 }
 
                 _entities.Posts.Add(post);
@@ -750,8 +757,22 @@ namespace PoolStats.Controllers
                 }
             }
         }
+             
 
-        public static Image Resize(Image image, int maxWidth = 0, int maxHeight = 0)
+        #endregion
+
+        #region Misc
+
+        public string GetPlayerNameFromID(int id)
+        {
+            return _entities.Players.SingleOrDefault(p => p.Id == id).PlayerName;
+        }
+
+        #endregion
+
+        #region Image Processing
+
+        public static Image ResizeImage(Image image, int maxWidth = 0, int maxHeight = 0)
         {
             if (maxWidth == 0)
                 maxWidth = image.Width;
@@ -768,15 +789,6 @@ namespace PoolStats.Controllers
             var newImage = new Bitmap(newWidth, newHeight);
             Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
             return newImage;
-        }
-
-        #endregion
-
-        #region Misc
-
-        public string GetPlayerNameFromID(int id)
-        {
-            return _entities.Players.SingleOrDefault(p => p.Id == id).PlayerName;
         }
 
         public static WebImage CropImage(WebImage image, decimal targetRatio)
@@ -802,6 +814,45 @@ namespace PoolStats.Controllers
                 int bottom = Convert.ToInt32(Math.Ceiling(difference / (decimal)2));
                 image.Crop(top, 0, bottom, 0);
             }
+            return image;
+        }
+
+        public static WebImage RotateImage(WebImage image, string rotateVal)
+        {
+            if (rotateVal != "0")
+            {
+                if (rotateVal == "90")
+                {
+                    image.RotateRight();
+                }
+                else if (rotateVal == "180")
+                {
+                    image.RotateRight();
+                    image.RotateRight();
+                }
+                else if (rotateVal == "270")
+                {
+                    image.RotateRight();
+                    image.RotateRight();
+                    image.RotateRight();
+                }
+                else if (rotateVal == "-90")
+                {
+                    image.RotateLeft();
+                }
+                else if (rotateVal == "-180")
+                {
+                    image.RotateLeft();
+                    image.RotateLeft();
+                }
+                else if (rotateVal == "-270")
+                {
+                    image.RotateLeft();
+                    image.RotateLeft();
+                    image.RotateLeft();
+                }
+            }
+
             return image;
         }
 

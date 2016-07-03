@@ -110,6 +110,7 @@ namespace BackupTask
                     conn.ConnectionString =
                         "Data Source=.\\SQLEXPRESS;" +
                         "Initial Catalog=PoolStatsDB;" +
+                        //"User Id = jb-net-admin1;Password = hellothere;" +
                         "Integrated Security=SSPI;" +
                         "AttachDbFilename = C:\\inetpub\\wwwroot\\poolstats\\App_Data\\PoolStatsDB.mdf; ";
 #endif
