@@ -4,12 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="104511d66ef24044961b59b3019a7210" Name="Diagram1">
-        <EntityTypeShape EntityType="PoolStatsDBModel.Player" Width="1.5" PointX="0.625" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="PoolStatsDBModel.FourPlayer" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PoolStatsDBModel.Pin" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+      <Diagram DiagramId="2817b6796eaf4837b3cbb73c6dba8e58" Name="Diagram1">
+        <EntityTypeShape EntityType="PoolStatsDBModel.FourPlayer" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PoolStatsDBModel.Player" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PoolStatsDBModel.Post" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PoolStatsDBModel.TwoPlayer" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PoolStatsDBModel.Post" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="PoolStatsDBModel.Pin" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

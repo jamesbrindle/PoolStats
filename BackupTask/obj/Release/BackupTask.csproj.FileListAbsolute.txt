@@ -1,6 +1,0 @@
-H:\Documents\Work\Repositories\PoolStats\BackupTask\bin\Release\BackupTask.exe.config
-H:\Documents\Work\Repositories\PoolStats\BackupTask\bin\Release\BackupTask.exe
-H:\Documents\Work\Repositories\PoolStats\BackupTask\bin\Release\BackupTask.pdb
-H:\Documents\Work\Repositories\PoolStats\BackupTask\obj\Release\BackupTask.exe
-H:\Documents\Work\Repositories\PoolStats\BackupTask\obj\Release\BackupTask.pdb
-H:\Documents\Work\Repositories\PoolStats\BackupTask\obj\Release\BackupTask.csprojResolveAssemblyReference.cache

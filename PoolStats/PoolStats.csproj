@@ -206,22 +206,12 @@
     <Compile Include="Models\FourPlayer.cs">
       <DependentUpon>PoolStatsModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Post.cs">
-      <DependentUpon>PoolStatsModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SplitString_Result.cs">
-      <DependentUpon>PoolStatsModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StatsViewModel.cs" />
-    <Compile Include="Models\FourPlayerViewModels.cs" />
     <Compile Include="Models\Pin.cs">
       <DependentUpon>PoolStatsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Player.cs">
       <DependentUpon>PoolStatsModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PlayersViewModels.cs" />
-    <Compile Include="Models\PinViewModels.cs" />
     <Compile Include="Models\PoolStatsModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -237,10 +227,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PoolStatsModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Post.cs">
+      <DependentUpon>PoolStatsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StatsViewModel.cs" />
+    <Compile Include="Models\FourPlayerViewModels.cs" />
+    <Compile Include="Models\PlayersViewModels.cs" />
+    <Compile Include="Models\PinViewModels.cs" />
+    <Compile Include="Models\PostsViewModel.cs" />
     <Compile Include="Models\TwoPlayer.cs">
       <DependentUpon>PoolStatsModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PostsViewModel.cs" />
     <Compile Include="Models\TwoPlayerViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -321,6 +318,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="manifest.json" />
     <EntityDeploy Include="Models\PoolStatsModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>PoolStatsModel.Designer.cs</LastGenOutput>
@@ -328,7 +326,6 @@
     <Content Include="Models\PoolStatsModel.edmx.diagram">
       <DependentUpon>PoolStatsModel.edmx</DependentUpon>
     </Content>
-    <Content Include="manifest.json" />
     <None Include="Properties\PublishProfiles\JB-NEt.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -350,6 +347,7 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />

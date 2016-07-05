@@ -107,12 +107,7 @@ namespace BackupTask
                     "Initial Catalog=PoolStatsDB;" +
                     "Integrated Security=SSPI;";
 #else
-                    conn.ConnectionString =
-                        "Data Source=.\\SQLEXPRESS;" +
-                        "Initial Catalog=PoolStatsDB;" +
-                        //"User Id = jb-net-admin1;Password = hellothere;" +
-                        "Integrated Security=SSPI;" +
-                        "AttachDbFilename = C:\\inetpub\\wwwroot\\poolstats\\App_Data\\PoolStatsDB.mdf; ";
+                    conn.ConnectionString = privateclass.connectionString;
 #endif
 
                     conn.Open();
@@ -124,10 +119,10 @@ namespace BackupTask
 		                     p2.Id [PlayerID],
 		                     p2.PlayerName,
 		                     tp.Score2
-                     FROM dbo.TwoPlayer tp
-	                    INNER JOIN dbo.Players p1
+                     FROM poolstats.TwoPlayer tp
+	                    INNER JOIN poolstats.Players p1
 		                    on p1.Id = tp.Player1
-	                    INNER JOIN dbo.Players p2
+	                    INNER JOIN poolstats.Players p2
 		                    on p2.Id = tp.Player2"
                         , conn);
 
@@ -157,37 +152,37 @@ namespace BackupTask
                             fp.Players2 [PlayerIds],
 		                    p2a.PlayerName + ' & ' + p2b.PlayerName [PlayerNames],
 		                    Score2
-                     FROM dbo.FourPlayer fp
-	                    INNER JOIN dbo.Players p1a
+                     FROM poolstats.FourPlayer fp
+	                    INNER JOIN poolstats.Players p1a
 		                    on p1a.Id = (
 				                    SELECT result.val
 				                    FROM (
 					                    SELECT [Value] as val, ROW_NUMBER() OVER (ORDER BY [Index]) AS rowNum 
-					                    FROM dbo.SplitString(fp.Players1, ',')
+					                    FROM poolstats.SplitString(fp.Players1, ',')
 					                    ) result
 				                    WHERE result.rowNum = 1)
-	                    INNER JOIN dbo.Players p1b
+	                    INNER JOIN poolstats.Players p1b
 		                    on p1b.Id = (
 				                    SELECT result.val
 				                    FROM (
 					                    SELECT [Value] as val, ROW_NUMBER() OVER (ORDER BY [Index]) AS rowNum 
-					                    FROM dbo.SplitString(fp.Players1, ',')
+					                    FROM poolstats.SplitString(fp.Players1, ',')
 					                    ) result
 				                    WHERE result.rowNum = 2)
-	                    INNER JOIN dbo.Players p2a
+	                    INNER JOIN poolstats.Players p2a
 		                    on p2a.Id = (
 				                    SELECT result.val
 				                    FROM (
 					                    SELECT [Value] as val, ROW_NUMBER() OVER (ORDER BY [Index]) AS rowNum 
-					                    FROM dbo.SplitString(fp.Players2, ',')
+					                    FROM poolstats.SplitString(fp.Players2, ',')
 					                    ) result
 				                    WHERE result.rowNum = 1)
-	                    INNER JOIN dbo.Players p2b
+	                    INNER JOIN poolstats.Players p2b
 		                    on p2b.Id = (
 				                    SELECT result.val
 				                    FROM (
 					                    SELECT [Value] as val, ROW_NUMBER() OVER (ORDER BY [Index]) AS rowNum 
-					                    FROM dbo.SplitString(fp.Players2, ',')
+					                    FROM poolstats.SplitString(fp.Players2, ',')
 					                    ) result
 				                    WHERE result.rowNum = 2)"
                         , conn);

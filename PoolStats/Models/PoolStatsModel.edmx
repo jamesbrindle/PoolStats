@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="PoolStatsDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="PoolStatsDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="FourPlayer">
           <Key>
             <PropertyRef Name="ID" />
@@ -17,7 +17,7 @@
           <Property Name="ID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PoolStatsDB.poolstats.Pin' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Pin">
           <Key>
             <PropertyRef Name="PinNumber" />
@@ -54,42 +54,22 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
           <Property Name="Comments" Type="varchar(max)" />
           <Property Name="ID" Type="int" Nullable="false" />
         </EntityType>
-        <Function Name="SplitString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="string" Type="nvarchar" Mode="In" />
-          <Parameter Name="delim" Type="nvarchar" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="Value" Type="nvarchar" MaxLength="4000" Nullable="false" />
-                <Property Name="Index" Type="int" Nullable="false" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
         <EntityContainer Name="PoolStatsDBModelStoreContainer">
-          <EntitySet Name="FourPlayer" EntityType="Self.FourPlayer" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Players" EntityType="Self.Players" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Posts" EntityType="Self.Posts" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TwoPlayer" EntityType="Self.TwoPlayer" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Pin" EntityType="Self.Pin" store:Type="Tables" store:Schema="dbo">
+          <EntitySet Name="FourPlayer" EntityType="Self.FourPlayer" Schema="poolstats" store:Type="Tables" />
+          <EntitySet Name="Players" EntityType="Self.Players" Schema="poolstats" store:Type="Tables" />
+          <EntitySet Name="Posts" EntityType="Self.Posts" Schema="poolstats" store:Type="Tables" />
+          <EntitySet Name="TwoPlayer" EntityType="Self.TwoPlayer" Schema="poolstats" store:Type="Tables" />
+          <EntitySet Name="Pin" EntityType="Self.Pin" store:Type="Tables" store:Schema="poolstats">
             <DefiningQuery>SELECT 
     [Pin].[PinNumber] AS [PinNumber]
-    FROM [dbo].[Pin] AS [Pin]</DefiningQuery>
+    FROM [poolstats].[Pin] AS [Pin]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PoolStatsDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Player">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="PlayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Male" Type="Boolean" Nullable="false" />
-        </EntityType>
         <EntityType Name="FourPlayer">
           <Key>
             <PropertyRef Name="ID" />
@@ -101,11 +81,24 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
           <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ID" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="Pin">
+        <EntityType Name="Player">
           <Key>
-            <PropertyRef Name="PinNumber" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="PinNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="PlayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Male" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="PlayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PostDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TwoPlayer">
           <Key>
@@ -118,56 +111,67 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
           <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ID" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="PoolStatsDB_Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Players" EntityType="Self.Player" />
-          <EntitySet Name="FourPlayers" EntityType="Self.FourPlayer" />
-          <EntitySet Name="Pins" EntityType="Self.Pin" />
-          <EntitySet Name="TwoPlayers" EntityType="Self.TwoPlayer" />
-          <EntitySet Name="Posts" EntityType="PoolStatsDBModel.Post" />
-          <FunctionImport Name="SplitString" IsComposable="true" ReturnType="Collection(PoolStatsDBModel.SplitString_Result)">
-            <Parameter Name="string" Mode="In" Type="String" />
-            <Parameter Name="delim" Mode="In" Type="String" />
-          </FunctionImport>
-        </EntityContainer>
-        <EntityType Name="Post">
+        <EntityType Name="Pin">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="PinNumber" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
-          <Property Name="PlayerName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="PostDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="FileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PinNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
-        <ComplexType Name="SplitString_Result">
-          <Property Type="String" Name="Value" Nullable="false" MaxLength="4000" />
-          <Property Type="Int32" Name="Index" Nullable="false" />
-        </ComplexType>
+        <EntityContainer Name="PoolStatsDBEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="FourPlayers" EntityType="Self.FourPlayer" />
+          <EntitySet Name="Players" EntityType="Self.Player" />
+          <EntitySet Name="Posts" EntityType="Self.Post" />
+          <EntitySet Name="TwoPlayers" EntityType="Self.TwoPlayer" />
+          <EntitySet Name="Pins" EntityType="Self.Pin" />
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="PoolStatsDBModelStoreContainer" CdmEntityContainer="PoolStatsDB_Entities">
-          <EntitySetMapping Name="Players">
-            <EntityTypeMapping TypeName="PoolStatsDBModel.Player">
-              <MappingFragment StoreEntitySet="Players">
-                <ScalarProperty Name="Male" ColumnName="Male" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="PlayerName" ColumnName="PlayerName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+        <EntityContainerMapping StorageEntityContainer="PoolStatsDBModelStoreContainer" CdmEntityContainer="PoolStatsDBEntities1">
           <EntitySetMapping Name="FourPlayers">
             <EntityTypeMapping TypeName="PoolStatsDBModel.FourPlayer">
               <MappingFragment StoreEntitySet="FourPlayer">
-                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Players1" ColumnName="Players1" />
                 <ScalarProperty Name="Score1" ColumnName="Score1" />
                 <ScalarProperty Name="Players2" ColumnName="Players2" />
                 <ScalarProperty Name="Score2" ColumnName="Score2" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Players">
+            <EntityTypeMapping TypeName="PoolStatsDBModel.Player">
+              <MappingFragment StoreEntitySet="Players">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PlayerName" ColumnName="PlayerName" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Male" ColumnName="Male" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="PoolStatsDBModel.Post">
+              <MappingFragment StoreEntitySet="Posts">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PlayerName" ColumnName="PlayerName" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TwoPlayers">
+            <EntityTypeMapping TypeName="PoolStatsDBModel.TwoPlayer">
+              <MappingFragment StoreEntitySet="TwoPlayer">
+                <ScalarProperty Name="Player1" ColumnName="Player1" />
+                <ScalarProperty Name="Score1" ColumnName="Score1" />
+                <ScalarProperty Name="Player2" ColumnName="Player2" />
+                <ScalarProperty Name="Score2" ColumnName="Score2" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -178,37 +182,6 @@ warning 6002: The table/view 'PoolStatsDB.dbo.Pin' does not have a primary key d
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TwoPlayers">
-            <EntityTypeMapping TypeName="PoolStatsDBModel.TwoPlayer">
-              <MappingFragment StoreEntitySet="TwoPlayer">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Player1" ColumnName="Player1" />
-                <ScalarProperty Name="Score1" ColumnName="Score1" />
-                <ScalarProperty Name="Player2" ColumnName="Player2" />
-                <ScalarProperty Name="Score2" ColumnName="Score2" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Posts">
-            <EntityTypeMapping TypeName="PoolStatsDBModel.Post">
-              <MappingFragment StoreEntitySet="Posts">
-                <ScalarProperty Name="FileName" ColumnName="FileName" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
-                <ScalarProperty Name="PlayerName" ColumnName="PlayerName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SplitString" FunctionName="PoolStatsDBModel.Store.SplitString">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="PoolStatsDBModel.SplitString_Result">
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="Index" ColumnName="Index" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

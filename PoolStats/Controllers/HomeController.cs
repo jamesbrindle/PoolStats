@@ -14,7 +14,7 @@ namespace PoolStats.Controllers
 {
     public class HomeController : Controller
     {
-        private PoolStatsDB_Entities _entities = new PoolStatsDB_Entities();
+        private PoolStatsDBEntities1 _entities = new PoolStatsDBEntities1();
 
         #region Properties (Cookie Control)
 
