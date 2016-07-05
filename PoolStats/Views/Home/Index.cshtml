@@ -148,89 +148,102 @@
     }
 }
 
-<div class="jumbotron" style="margin-left: -8px; margin-right: -6px; margin-top: 8px;">
-    <p style="font-size: 12pt;">2 Player match stats only...</p><br />
-    <p style="font-size: 12pt; font-weight: bold; margin-top: -30px;">Total Games Played: @Html.DisplayFor(m => totalAllGames)</p><br /><br />
-    <p style="font-size: 12pt; margin-top: -75px;">
 
-        @{
-            int i = 0;
-        }
-
-        @foreach (PoolStats.Models.StatsViewModel stat in stats)
-        {
-            string percentage = stat.PercentageWon.ToString("#.##") + "%";
-            string percentageGamePlay = stat.PercentageGamePlay.ToString("#.##") + "%";
-            string points = stat.Points.ToString();
-
-            if (Double.IsNaN(stat.PercentageWon) || stat.PercentageWon == 0)
-            {
-                percentage = "0%";
-            }
-            if (percentage == "%")
-            {
-                percentage = "0%";
-            }
-            if (percentage[0] == '.')
-            {
-                percentage = "0" + percentage;
-            }
-
-            if (Double.IsNaN(stat.PercentageGamePlay) || stat.PercentageGamePlay == 0)
-            {
-                percentage = "0%";
-            }
-            if (percentageGamePlay == "%")
-            {
-                percentageGamePlay = "0%";
-            }
-            if (percentageGamePlay[0] == '.')
-            {
-                percentageGamePlay = "0" + percentageGamePlay;
-            }
-
-            if (i == 0)
-            {
-                <span style="font-weight: bold; color: red;">@Html.DisplayFor(s => stat.PlayerName)&nbsp; &nbsp; (In the lead)</span> <br />
-            }
-            else
-            {
-                <span style="font-weight: bold;">@Html.DisplayFor(s => stat.PlayerName)</span> <br />
-            }
-
-            if (stat.PlayerName == "Jender Reassignment")
-            {
-                if (stat.GamesWon == 0)
-                {
-                    <span style="font-size: 9pt; color: blue;">
-                        According to Jon, it's less embarrassing to be 7 balled than to be beaten by "Jenny". I say GO ON JENNY! Get a game won!
-                    </span><br /><br />
-                }
-                else if (stat.GamesWon > 0)
-                {
-                    <span style="font-size: 9pt; color: blue;">
-                        Jenny won a game! GET IN!
-                    </span><br /><br />
-                }
-            }
-
-            <span>Percentage Winning: </span><span style="color: red;">@Html.DisplayFor(s => percentage)</span><br />
-            <span>Total Points: </span><span style="color: red;">@Html.DisplayFor(s => points) </span><br />
-            <span>Player Commitment: </span><span style="color: blue;">@Html.DisplayFor(s => percentageGamePlay) </span><br />
-            <span>Total Matches: @Html.DisplayFor(s => stat.TotalGames). Total Won: @Html.DisplayFor(s => stat.GamesWon) </span><br /><br />
-
-            i++;
-        }
+<div class="CollaspableDiv">
+    <p class="heading spanButton">
+        <span style="color: cornflowerblue">Individual Stats</span>
     </p>
 
-    <p style="font-size: 9pt;">*Player Commitment = Percentage of games played of all games.</p>
-    <p style="font-size: 9pt;">*Total Points = 1 point for winning, 1/2 point for losing.</p>
+
+    <div class="content">
+
+        <div class="jumbotron" style="margin-left: -8px; margin-right: -9px;">
+            <p style="font-size: 12pt;">2 Player match stats only...</p><br />
+            <p style="font-size: 12pt; font-weight: bold; margin-top: -30px;">Total Games Played: @Html.DisplayFor(m => totalAllGames)</p><br /><br />
+            <p style="font-size: 12pt; margin-top: -75px;">
+
+                @{
+                    int i = 0;
+                }
+
+                @foreach (PoolStats.Models.StatsViewModel stat in stats)
+                {
+                    string percentage = stat.PercentageWon.ToString("#.##") + "%";
+                    string percentageGamePlay = stat.PercentageGamePlay.ToString("#.##") + "%";
+                    string points = stat.Points.ToString();
+
+                    if (Double.IsNaN(stat.PercentageWon) || stat.PercentageWon == 0)
+                    {
+                        percentage = "0%";
+                    }
+                    if (percentage == "%")
+                    {
+                        percentage = "0%";
+                    }
+                    if (percentage[0] == '.')
+                    {
+                        percentage = "0" + percentage;
+                    }
+
+                    if (Double.IsNaN(stat.PercentageGamePlay) || stat.PercentageGamePlay == 0)
+                    {
+                        percentage = "0%";
+                    }
+                    if (percentageGamePlay == "%")
+                    {
+                        percentageGamePlay = "0%";
+                    }
+                    if (percentageGamePlay[0] == '.')
+                    {
+                        percentageGamePlay = "0" + percentageGamePlay;
+                    }
+
+                    if (i == 0)
+                    {
+                        <span style="font-weight: bold; color: red;">@Html.DisplayFor(s => stat.PlayerName)&nbsp; &nbsp; (In the lead)</span> <br />
+                    }
+                    else
+                    {
+                        <span style="font-weight: bold;">@Html.DisplayFor(s => stat.PlayerName)</span> <br />
+                    }
+
+                    if (stat.PlayerName == "Jender Reassignment")
+                    {
+                        if (stat.GamesWon == 0)
+                        {
+                            <span style="font-size: 9pt; color: blue;">
+                                According to Jon, it's less embarrassing to be 7 balled than to be beaten by "Jenny". I say GO ON JENNY! Get a game won!
+                            </span><br /><br />
+                        }
+                        else if (stat.GamesWon > 0)
+                        {
+                            <span style="font-size: 9pt; color: blue;">
+                                Jenny won a game! GET IN!
+                            </span><br /><br />
+                        }
+                    }
+
+                    <span>Percentage Winning: </span><span style="color: red;">@Html.DisplayFor(s => percentage)</span><br />
+                    <span>Total Points: </span><span style="color: red;">@Html.DisplayFor(s => points) </span><br />
+                    <span>Player Commitment: </span><span style="color: blue;">@Html.DisplayFor(s => percentageGamePlay) </span><br />
+                    <span>Total Matches: @Html.DisplayFor(s => stat.TotalGames). Total Won: @Html.DisplayFor(s => stat.GamesWon) </span><br /><br />
+
+                    i++;
+                }
+            </p>
+
+            <p style="font-size: 9pt;">*Player Commitment = Percentage of games played of all games.</p>
+            <p style="font-size: 9pt;">*Total Points = 1 point for winning, 1/2 point for losing.</p>
+        </div>
+
+    </div>
 </div>
+<br />
 
 <div class="row" style="padding-left: 9px; padding-right: 9px; margin-top: -10px;">
     @if (((bool)ViewData["Changable"]))
-    {
-        @Html.ActionLink("Add / Modify Players", "CreatePlayers")
+            {
+        <span style="margin-left: 8px;">@Html.ActionLink("Add / Modify Players", "CreatePlayers")</span>
     }
     else
     {
@@ -238,15 +251,19 @@
     }
 
     <br /><br />
-    <h4>Two Player Match Scores</h4>
+    <h4 style="margin-left: 8px;">Two Player Match Scores</h4>
     <p style="padding-top: 10px">
         @if (((bool)ViewData["Changable"]))
         {
-            @Html.ActionLink("Create New", "Create2p")
+            <span style="margin-left: 8px;">
+                @Html.ActionLink("Create New", "Create2p")
+            </span>
         }
         else
         {
-            <a href='#' onClick='alert("You need to unlock (top right).")'>Create New Match</a>
+            <span style="margin-left: 8px;">
+                <a href='#' onClick='alert("You need to unlock (top right).")'>Create New Match</a>
+            </span>
         }
     </p>
 
@@ -280,16 +297,16 @@
                     {
                         if (male)
                         {
-                            <img src="@Url.Content("/Content/Images/default_profile_male.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                            <img src="@Url.Content("/Content/Images/default_profile_male.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                         }
                         else
                         {
-                            <img src="@Url.Content("/Content/Images/default_profile_female.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                            <img src="@Url.Content("/Content/Images/default_profile_female.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                         }
                     }
                     else
                     {
-                        <img src="@Url.Content("/Content/ProfileImages/" + item.Player1 + ".jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                        <img src="@Url.Content("/Content/ProfileImages/" + item.Player1 + ".jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                     }
                 </td>
                 <td style="white-space: nowrap; text-align: center; vertical-align: middle; width: 50%">
@@ -407,16 +424,16 @@
                     {
                         if (male2)
                         {
-                            <img src="@Url.Content("/Content/Images/default_profile_male.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                            <img src="@Url.Content("/Content/Images/default_profile_male.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                         }
                         else
                         {
-                            <img src="@Url.Content("/Content/Images/default_profile_female.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                            <img src="@Url.Content("/Content/Images/default_profile_female.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                         }
                     }
                     else
                     {
-                        <img src="@Url.Content("/Content/ProfileImages/" + item.Player2 + ".jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                        <img src="@Url.Content("/Content/ProfileImages/" + item.Player2 + ".jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                     }
                 </td>
             </tr>
@@ -433,28 +450,30 @@
                         }
     </table>
     @if (Model.Item1.Count == 0)
-    {
-        <p style="margin-top: -10px; font-style: italic; padding-left: 6px; padding-bottom: 10px;">No current matches set up.</p>
+            {
+        <p style="margin-top: -10px; font-style: italic; padding-left: 8px; padding-bottom: 10px; margin-left: 6px;">No current matches set up.</p>
     }
 </div>
 <br />
 <br />
 <div class="row" style="padding-left: 9px; padding-right: 9px; margin-top: -20px;">
-    <h4>Four Player Match Scores</h4>
+    <h4 style="margin-left: 8px;">Four Player Match Scores</h4>
     <p style="padding-top: 10px">
         @if (((bool)ViewData["Changable"]))
         {
-            @Html.ActionLink("Create New", "Create4p")
+            <span style="margin-left: 8px;">@Html.ActionLink("Create New", "Create4p")</span>
         }
         else
         {
-            <a href='#' onClick='alert("You need to unlock (top right).")'>Create New Match</a>
+            <span style="margin-left: 8px;">
+                <a href='#' onClick='alert("You need to unlock (top right).")'>Create New Match</a>
+            </span>
         }
     </p>
 
-    @{ 
+    @{
         int mCount = 0;
-     }
+    }
 
     <table style="width: 100%;">
         @foreach (var item in Model.Item2)
@@ -491,16 +510,16 @@
                     {
                         if (male)
                         {
-                            <img src="@Url.Content("/Content/Images/default_profile_male.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                            <img src="@Url.Content("/Content/Images/default_profile_male.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                         }
                         else
                         {
-                            <img src="@Url.Content("/Content/Images/default_profile_female.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                            <img src="@Url.Content("/Content/Images/default_profile_female.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                         }
                     }
                     else
                     {
-                        <img src="@Url.Content("/Content/ProfileImages/" + player1 + ".jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                        <img src="@Url.Content("/Content/ProfileImages/" + player1 + ".jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                     }
 
                     <br />
@@ -622,16 +641,16 @@
                     {
                         if (male3)
                         {
-                            <img src="@Url.Content("/Content/Images/default_profile_male.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                            <img src="@Url.Content("/Content/Images/default_profile_male.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                         }
                         else
                         {
-                            <img src="@Url.Content("/Content/Images/default_profile_female.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                            <img src="@Url.Content("/Content/Images/default_profile_female.jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                         }
                     }
                     else
                     {
-                        <img src="@Url.Content("/Content/ProfileImages/" + player3 + ".jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:200px;" />
+                        <img src="@Url.Content("/Content/ProfileImages/" + player3 + ".jpg")" alt="Image" style="width: 100%; border-style: solid; border-width: 1px; border-color: silver; max-width:150px;" />
                     }
                     <br />
                     <br />
@@ -684,30 +703,30 @@
                     }
                 </td>
             </tr>
-            <tr>
-                <td style="text-align: center; vertical-align: middle; height: 35px;" colspan="3">
+                    <tr>
+                        <td style="text-align: center; vertical-align: middle; height: 35px;" colspan="3">
 
-                    <span style="font-size:9pt; font-weight: bold;">@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == player2).FirstOrDefault().PlayerName)</span>
-                    &nbsp;&nbsp;V&nbsp;&nbsp;
-                    <span style="font-size:9pt; font-weight: bold;">@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == player4).FirstOrDefault().PlayerName)</span>
-                </td>
-            </tr>
-            <tr>
-                @if (mCount == Model.Item2.Count)
+                            <span style="font-size:9pt; font-weight: bold;">@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == player2).FirstOrDefault().PlayerName)</span>
+                            &nbsp;&nbsp;V&nbsp;&nbsp;
+                            <span style="font-size:9pt; font-weight: bold;">@Html.DisplayFor(modelItem => Model.Item3.Where(p => p.Id == player4).FirstOrDefault().PlayerName)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        @if (mCount == Model.Item2.Count)
                 {
-                    <td colspan="3" height="5" style="border-bottom: solid; border-bottom-color: silver; border-bottom-width: 1px"></td>
-                }
-                else
-                {
-                    <td colspan="3" height="5"></td>
-                }
-            </tr>
+                            <td colspan="3" height="5" style="border-bottom: solid; border-bottom-color: silver; border-bottom-width: 1px"></td>
+                        }
+                        else
+                        {
+                            <td colspan="3" height="5"></td>
+                        }
+                    </tr>
                         }
     </table>
 
     @if (Model.Item2.Count == 0)
-    {
-        <p style="margin-top: -10px; font-style: italic; padding-left: 6px; padding-bottom: 10px;">No current matches set up.</p>
+            {
+        <p style="margin-top: -10px; font-style: italic; padding-left: 6px; padding-bottom: 10px; margin-left: 6px;">No current matches set up.</p>
     }
 </div>
 
