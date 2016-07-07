@@ -150,7 +150,7 @@
 
 
 <div class="CollaspableDiv">
-    <p class="heading spanButton">
+    <p class="heading spanButton" style="text-align: center;">
         <span style="color: cornflowerblue">Individual Stats</span>
     </p>
 
@@ -158,9 +158,8 @@
     <div class="content">
 
         <div class="jumbotron" style="margin-left: -8px; margin-right: -9px;">
-            <p style="font-size: 12pt;">2 Player match stats only...</p><br />
-            <p style="font-size: 12pt; font-weight: bold; margin-top: -30px;">Total Games Played: @Html.DisplayFor(m => totalAllGames)</p><br /><br />
-            <p style="font-size: 12pt; margin-top: -75px;">
+            <p style="font-size: 12pt;">2 Player match stats only...</p><br />            
+            <p style="font-size: 12pt; margin-top: -45px;">
 
                 @{
                     int i = 0;
@@ -239,6 +238,8 @@
     </div>
 </div>
 <br />
+<br />
+<p style="font-size: 12pt; font-weight: bold; margin-top: -30px; ">Total Games Played: <span style="font-weight: normal;">@Html.DisplayFor(m => totalAllGames)</span></p><br />
 
 <div class="row" style="padding-left: 9px; padding-right: 9px; margin-top: -10px;">
     @if (((bool)ViewData["Changable"]))

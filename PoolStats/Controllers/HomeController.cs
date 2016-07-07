@@ -96,7 +96,8 @@ namespace PoolStats.Controllers
         {
             get
             {
-                if (CookieStore.GetCookie("postUser") == null) {
+                if (CookieStore.GetCookie("postUser") == null)
+                {
                     ViewData["PostUser"] = "";
                     return "";
                 }
@@ -267,27 +268,46 @@ namespace PoolStats.Controllers
             var mute = MutedSound;
             var changable = Changable;
 
-            int max = _entities.Players.Max(p => p.Id);
-
-            input.Id = max + 1;
-
-            if (file != null)
+            if (ModelState.IsValid && !String.IsNullOrEmpty(input.PlayerName))
             {
-                input.Image = input.Id + ".jpg";
-                string imagePath = Server.MapPath(Url.Content("~/Content/ProfileImages/")) + input.Image;
+                if (_entities.Players.Any(p => p.PlayerName == input.PlayerName))
+                {
+                    ModelState.AddModelError("PlayerNameError", "That player name already exists.");
 
-                WebImage img = CropImage(new WebImage(file.InputStream), new decimal(1));
+                    ViewData["CurrentPlayers"] = _entities.Players.ToList();
+                    return View("CreatePlayers", _entities.Players.Create());
+                }
 
-                img = RotateImage(img, rotateVal);
-                img.Resize(300, (300 * img.Height / img.Width), true, false);
+                int max = _entities.Players.Max(p => p.Id);
 
-                img.Save(imagePath, "jpg", true);
+                input.Id = max + 1;
+
+                if (file != null)
+                {
+                    input.Image = input.Id + ".jpg";
+                    string imagePath = Server.MapPath(Url.Content("~/Content/ProfileImages/")) + input.Image;
+
+                    WebImage img = CropImage(new WebImage(file.InputStream), new decimal(1));
+
+                    img = RotateImage(img, rotateVal);
+                    img.Resize(300, (300 * img.Height / img.Width), true, false);
+
+                    img.Save(imagePath, "jpg", true);
+                }
+
+                _entities.Players.Add(input);
+                _entities.SaveChanges();
+
+                return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
             }
+            else
+            {
+                if (String.IsNullOrEmpty(input.PlayerName))
+                    ModelState.AddModelError("PlayerNameError", "You have not entered a player name.");
 
-            _entities.Players.Add(input);
-            _entities.SaveChanges();
-
-            return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
+                return View("CreatePlayers", _entities.Players.Create());
+            }
         }
 
         public ActionResult SubmitChangePlayer(Models.Player input, HttpPostedFileWrapper file, string rotateVal)
@@ -296,31 +316,57 @@ namespace PoolStats.Controllers
             var mute = MutedSound;
             var changable = Changable;
 
-            Player player = _entities.Players.Find(input.Id);
-            player.PlayerName = input.PlayerName;
-            player.Male = input.Male;
-            
-            if (file != null)
+            if (ModelState.IsValid && !String.IsNullOrEmpty(input.PlayerName))
             {
-                input.Image = input.Id + ".jpg";
-                string imagePath = Server.MapPath(Url.Content("~/Content/ProfileImages/")) + input.Image;
+                Player player = _entities.Players.Find(input.Id);
 
-                WebImage img = CropImage(new WebImage(file.InputStream), new decimal(1));
+                foreach (var p in _entities.Players)
+                {
+                    if (p.PlayerName == input.PlayerName)
+                    {
+                        if (p.Id != input.Id)
+                        {
+                            ModelState.AddModelError("PlayerNameError", "You have tried to change your name to one that already exists as a different player.");
 
-                img = RotateImage(img, rotateVal);
-                img.Resize(300, (300 * img.Height / img.Width), true, false);
+                            ViewData["CurrentPlayers"] = _entities.Players.ToList();
+                            return View("ModifyPlayer", _entities.Players.Find(input.Id));
+                        }
+                    }
+                }
 
-                img.Save(imagePath, "jpg", true);
+                player.PlayerName = input.PlayerName;
+                player.Male = input.Male;
 
-                player.Image = input.Image;
+                if (file != null)
+                {
+                    input.Image = input.Id + ".jpg";
+                    string imagePath = Server.MapPath(Url.Content("~/Content/ProfileImages/")) + input.Image;
+
+                    WebImage img = CropImage(new WebImage(file.InputStream), new decimal(1));
+
+                    img = RotateImage(img, rotateVal);
+                    img.Resize(300, (300 * img.Height / img.Width), true, false);
+
+                    img.Save(imagePath, "jpg", true);
+
+                    player.Image = input.Image;
+                }
+
+                _entities.Entry(player).State = EntityState.Modified;
+                _entities.SaveChanges();
+
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+                return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
             }
+            else
+            {
+                if (String.IsNullOrEmpty(input.PlayerName))
+                    ModelState.AddModelError("PlayerNameError", "You have not entered a player name.");
 
-            _entities.Entry(player).State = EntityState.Modified;
-            _entities.SaveChanges();
-
-            ViewData["CurrentPlayers"] = _entities.Players.ToList();
-
-            return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
+                return View("ModifyPlayer", _entities.Players.Find(input.Id));
+            }
         }
 
         public ActionResult DeletePlayer(Models.Player input)
@@ -409,28 +455,51 @@ namespace PoolStats.Controllers
             var mute = MutedSound;
             var changable = Changable;
 
-            var twoPlayerModel = new PoolStats.Models.TwoPlayer();
-
-            twoPlayerModel.Player1 = player1;
-            twoPlayerModel.Player2 = player2;
-
-            twoPlayerModel.Score1 = 0;
-            twoPlayerModel.Score2 = 0;
-
-            int max = 0;
-
-            try
+            if (player1 != player2)
             {
-                max = _entities.TwoPlayers.Max(p => p.ID);
+                List<TwoPlayer> currentTwoPlayerGames = _entities.TwoPlayers.ToList();
+
+                foreach (var match in currentTwoPlayerGames)
+                {
+                    if ((match.Player1 == player1 && match.Player2 == player2) || match.Player1 == player2 && match.Player2 == player1)
+                    {
+                        ModelState.AddModelError(String.Empty, "A match has already been set up for the selected players.");
+                        ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+                        return View("Create2p", _entities.TwoPlayers.Create());
+                    }
+                }
+
+                var twoPlayerModel = new PoolStats.Models.TwoPlayer();
+
+                twoPlayerModel.Player1 = player1;
+                twoPlayerModel.Player2 = player2;
+
+                twoPlayerModel.Score1 = 0;
+                twoPlayerModel.Score2 = 0;
+
+                int max = 0;
+
+                try
+                {
+                    max = _entities.TwoPlayers.Max(p => p.ID);
+                }
+                catch { }
+
+                twoPlayerModel.ID = max + 1;
+
+                _entities.TwoPlayers.Add(twoPlayerModel);
+                _entities.SaveChanges();
+
+                return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
             }
-            catch { }
+            else
+            {
+                ModelState.AddModelError(String.Empty, "People are trying to play themselves. Although this is possible it is not in the spirit of this app and so it is not allowed.");
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
 
-            twoPlayerModel.ID = max + 1;
-
-            _entities.TwoPlayers.Add(twoPlayerModel);
-            _entities.SaveChanges();
-
-            return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
+                return View("Create2p", _entities.TwoPlayers.Create());
+            }
         }
 
         public ViewResult Add2p(int id, string s, string anchorId)
@@ -518,28 +587,112 @@ namespace PoolStats.Controllers
             var mute = MutedSound;
             var changable = Changable;
 
-            var fourPlayerModel = new PoolStats.Models.FourPlayer();
-
-            fourPlayerModel.Players1 = player1 + "," + player2;
-            fourPlayerModel.Players2 = player3 + "," + player4;
-
-            fourPlayerModel.Score1 = 0;
-            fourPlayerModel.Score2 = 0;
-
-            int max = 0;
-
-            try
+            if (player1 == player2)
             {
-                max = _entities.FourPlayers.Max(p => p.ID);
+                ModelState.AddModelError(String.Empty, "Player 1 is the same as player 2");
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+                return View("Create4p", _entities.FourPlayers.Create());
             }
-            catch { }
+            else if (player1 == player3)
+            {
+                ModelState.AddModelError(String.Empty, "Player 1 is the same as player 3");
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
 
-            fourPlayerModel.ID = max + 1;
+                return View("Create4p", _entities.FourPlayers.Create());
+            }
+            else if (player1 == player4)
+            {
+                ModelState.AddModelError(String.Empty, "Player 1 is the same as player 4");
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
 
-            _entities.FourPlayers.Add(fourPlayerModel);
-            _entities.SaveChanges();
+                return View("Create4p", _entities.FourPlayers.Create());
+            }
+            else if (player2 == player3)
+            {
+                ModelState.AddModelError(String.Empty, "Player 2 is the same as player 3");
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
 
-            return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
+                return View("Create4p", _entities.FourPlayers.Create());
+            }
+            else if (player2 == player4)
+            {
+                ModelState.AddModelError(String.Empty, "Player 2 is the same as player 4");
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+                return View("Create4p", _entities.FourPlayers.Create());
+            }
+            else if (player3 == player4)
+            {
+                ModelState.AddModelError(String.Empty, "Player 3 is the same as player 4");
+                ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+                return View("Create4p", _entities.FourPlayers.Create());
+            }
+            else
+            {
+                List<FourPlayer> currentFourPlayerGames = _entities.FourPlayers.ToList();
+
+                foreach (var match in currentFourPlayerGames)
+                {
+                    string pl1 = match.Players1.Split(',')[0];
+                    string pl2 = match.Players1.Split(',')[1];
+                    string pl3 = match.Players2.Split(',')[0];
+                    string pl4 = match.Players2.Split(',')[1];
+
+                    if (pl1 == player1 && pl2 == player2 && pl3 == player3 && pl4 == player4)
+                    {
+                        ModelState.AddModelError(String.Empty, "A match has already been set up for the selected players.");
+                        ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+                        return View("Create4p", _entities.FourPlayers.Create());
+                    }
+                    else if (pl1 == player2 && pl2 == player1 && pl3 == player3 && pl4 == player4)
+                    {
+                        ModelState.AddModelError(String.Empty, "A match has already been set up for the selected players.");
+                        ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+                        return View("Create4p", _entities.FourPlayers.Create());
+                    }
+                    else if (pl1 == player2 && pl2 == player1 && pl3 == player4 && pl4 == player3)
+                    {
+                        ModelState.AddModelError(String.Empty, "A match has already been set up for the selected players.");
+                        ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+                        return View("Create4p", _entities.FourPlayers.Create());
+                    }
+                    if (pl1 == player1 && pl2 == player2 && pl3 == player4 && pl4 == player3)
+                    {
+                        ModelState.AddModelError(String.Empty, "A match has already been set up for the selected players.");
+                        ViewData["CurrentPlayers"] = _entities.Players.ToList();
+
+                        return View("Create4p", _entities.FourPlayers.Create());
+                    }
+                }
+
+                var fourPlayerModel = new PoolStats.Models.FourPlayer();
+
+                fourPlayerModel.Players1 = player1 + "," + player2;
+                fourPlayerModel.Players2 = player3 + "," + player4;
+
+                fourPlayerModel.Score1 = 0;
+                fourPlayerModel.Score2 = 0;
+
+                int max = 0;
+
+                try
+                {
+                    max = _entities.FourPlayers.Max(p => p.ID);
+                }
+                catch { }
+
+                fourPlayerModel.ID = max + 1;
+
+                _entities.FourPlayers.Add(fourPlayerModel);
+                _entities.SaveChanges();
+
+                return View("Index", Tuple.Create(_entities.TwoPlayers.ToList(), _entities.FourPlayers.ToList(), _entities.Players.ToList()));
+            }
         }
 
         public ViewResult Add4p(int id, string s, string anchorId)
@@ -700,7 +853,7 @@ namespace PoolStats.Controllers
 
             if (!String.IsNullOrEmpty(PostUser))
                 ViewData["PlayerName"] = GetPlayerNameFromID(Convert.ToInt32(playerId));
-            
+
             if (string.IsNullOrEmpty(message) && file == null)
             {
                 return View("Posts", Tuple.Create(_entities.Players.ToList(), _entities.Posts.ToList()));
@@ -757,7 +910,42 @@ namespace PoolStats.Controllers
                 }
             }
         }
-             
+
+        public ActionResult DeletePost(int id, int playerId)
+        {
+            AlwaysUpdate();
+            var mute = MutedSound;
+            var changable = Changable;
+
+            if (!String.IsNullOrEmpty(PostUser))
+                ViewData["PlayerName"] = GetPlayerNameFromID(Convert.ToInt32(playerId));
+
+            try
+            {
+                Post post = _entities.Posts.Single(p => p.ID == id);
+                _entities.Entry(post).State = EntityState.Deleted;
+
+                _entities.SaveChanges();
+            }
+            catch { }
+
+
+            List<Post> reverseList = new List<Post>();
+
+            for (int i = _entities.Posts.Count() - 1; i >= 0; i--)
+            {
+                reverseList.Add(_entities.Posts.ToList().ElementAt(i));
+            }
+
+            if (reverseList.Count > 200)
+            {
+                return View("Posts", Tuple.Create(_entities.Players.ToList(), reverseList.GetRange(0, 200)));
+            }
+            else
+            {
+                return View("Posts", Tuple.Create(_entities.Players.ToList(), reverseList));
+            }
+        }
 
         #endregion
 

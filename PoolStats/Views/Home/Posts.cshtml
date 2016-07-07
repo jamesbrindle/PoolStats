@@ -99,7 +99,7 @@
 @using (Html.BeginForm("SubmitPost", "Home", FormMethod.Post, new { @encType = "multipart/form-data" }))
 {
     <div class="CollaspableDiv">
-        <p class="heading spanButton">
+        <p class="heading spanButton" style="text-align: center;">
             <span style="color: cornflowerblue">Create Post</span>
         </p>
 
@@ -109,7 +109,7 @@
                 if (String.IsNullOrEmpty((string)ViewData["PostUser"]))
                 {
                     <p>Post Player:</p>@Html.DropDownList("playerid", new SelectList(Model.Item1, "Id", "PlayerName"), new { @class = "form-control", @style = "width: 100%;" })
-                    <p style="font-size: 9pt; padding-top: 10px; margin-bottom: -10px; color: red;">*Once you've posted as this user it will be saved for next time and can only be changed by clearing your cookies</p>
+                    <p style="font-size: 9pt; padding-top: 10px; margin-bottom: -10px; color: red;">*Once you've posted as this user it will be saved for next time and can only be changed by clearing your cookies.</p>
                 }
                 else
                 {
@@ -159,13 +159,13 @@
     foreach (PoolStats.Models.Post post in Model.Item2)
     {
         <span style="font-style: italic;">@Html.DisplayFor(p => post.PostDate)</span>
-                        <br />
-                        <br />
+        <br />
+        <br />
         if (!String.IsNullOrEmpty(post.FileName))
         {
             <img src="@Url.Content("/Content/Posts/Images/" + post.FileName)"
                  alt="Image" class="img-responsive" style="text-align: center; border-style: none; border-color: white; border-width: 0px;" />
-                                <br />
+                <br />
         }
         if (!String.IsNullOrEmpty(post.FileName))
         {
@@ -176,16 +176,35 @@
             <p>@Html.DisplayFor(p => post.Message)<br /></p>
         }
 
-        <p style="margin-top: 7px; font-style: italic;">Posted By: <span style="font-weight: bold;">@Html.DisplayFor(p => post.PlayerName)</span></p>
-                        <hr />
+        <table style="width: 100%; vertical-align: top;">
+            <tr>
+                <td>
+                    <p style="margin-top: 7px; font-style: italic;">Posted By: <span style="font-weight: bold;">@Html.DisplayFor(p => post.PlayerName)</span></p>
+                    <hr />
+                </td>
+                <td style="vertical-align: top; text-align: right;">
+
+                    @if ((bool)ViewData["Changable"])
+                    {
+                        if (!String.IsNullOrEmpty((string)ViewData["PlayerName"]))
+                        {
+                            string playerName = (string)ViewData["PlayerName"];
+                            string playerID = (string)ViewData["PostUser"];
+
+                            if (playerName == post.PlayerName)
+                            {
+                                <a href='@Url.Action("DeletePost", "Home", new { post.ID, playerID })' onclick="return confirm('Are you sure you want to delete this post?');">
+                                    <img src='@Url.Content("~/Content/Images/delete.jpg")' style="width: 19px; padding-top: 9px;" />
+                                </a>
+                            }
+                        }
+                    }
+                </td>
+            </tr>
+        </table>
+
     }
 }
-
-
-
-
-
-
 
 @Html.ActionLink("Back to List", "Back", new { id = "" })
 
