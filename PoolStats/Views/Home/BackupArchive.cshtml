@@ -21,7 +21,7 @@
 
     foreach (FileInfo file in Files)
     {
-        string path = "http://poolstats.jb-net.co.uk/Content/Backups/" + file.Name.Replace(" ", "%20");
+        string path = "http://jb-net-poolstats.azurewebsites.net/Content/Backups/" + file.Name.Replace(" ", "%20");
         string fileName = file.Name.Replace(".txt", "");
 
         <p><a href=@{@path} target="_blank">@Html.DisplayFor(a => fileName)</a></p>
