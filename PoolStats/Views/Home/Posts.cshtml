@@ -81,6 +81,19 @@
         }
     }
 
+    function collapseStats() {
+
+        var statsDiv = document.getElementById("addPost");
+
+        if (statsDiv.className == "hidden") {
+            statsDiv.className = "show";
+        }
+        else {
+            statsDiv.className = "hidden";
+        }
+
+    }
+
 </script>
 
 @{
@@ -98,12 +111,14 @@
 
 @using (Html.BeginForm("SubmitPost", "Home", FormMethod.Post, new { @encType = "multipart/form-data" }))
 {
-    <div class="CollaspableDiv">
-        <p class="heading spanButton" style="text-align: center;">
-            <span style="color: cornflowerblue">Create Post</span>
-        </p>
 
-        <div class="content">
+    <p class="heading spanButton" onclick="collapseStats()" style="text-align: center;">
+        <span style="color: cornflowerblue">Create Post</span>
+    </p>
+
+    <div id="addPost" class="hidden">
+
+        <div>
             @if ((bool)ViewData["Changable"])
             {
                 if (String.IsNullOrEmpty((string)ViewData["PostUser"]))
@@ -165,7 +180,7 @@
         {
             <img src="@Url.Content("/Content/Posts/Images/" + post.FileName)"
                  alt="Image" class="img-responsive" style="text-align: center; border-style: none; border-color: white; border-width: 0px;" />
-                <br />
+            <br />
         }
         if (!String.IsNullOrEmpty(post.FileName))
         {
