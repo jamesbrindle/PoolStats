@@ -1,4 +1,9 @@
 PoolStats/obj
+PoolStats/bin
 PoolStats/Web.Release.config
 BackupTask/privateclass.cs
 BackupTask/obj
+BackupTask/bin
+
+Publish
+.vs

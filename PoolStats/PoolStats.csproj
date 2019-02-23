@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -284,6 +285,26 @@
     <Content Include="Content\Images\unlocked.png" />
     <Content Include="Content\Images\unmute.png" />
     <Content Include="Content\jquery-3.0.0.js" />
+    <Content Include="Content\Posts\Images\1.jpg" />
+    <Content Include="Content\Posts\Images\10.jpg" />
+    <Content Include="Content\Posts\Images\11.jpg" />
+    <Content Include="Content\Posts\Images\16.jpg" />
+    <Content Include="Content\Posts\Images\2.jpg" />
+    <Content Include="Content\Posts\Images\3.jpg" />
+    <Content Include="Content\Posts\Images\6.jpg" />
+    <Content Include="Content\Posts\Images\7.jpg" />
+    <Content Include="Content\ProfileImages\1.jpg" />
+    <Content Include="Content\ProfileImages\10.jpg" />
+    <Content Include="Content\ProfileImages\11.jpg" />
+    <Content Include="Content\ProfileImages\12.jpg" />
+    <Content Include="Content\ProfileImages\14.jpg" />
+    <Content Include="Content\ProfileImages\2.jpg" />
+    <Content Include="Content\ProfileImages\3.jpg" />
+    <Content Include="Content\ProfileImages\4.jpg" />
+    <Content Include="Content\ProfileImages\6.jpg" />
+    <Content Include="Content\ProfileImages\7.jpg" />
+    <Content Include="Content\ProfileImages\8.jpg" />
+    <Content Include="Content\ProfileImages\9.jpg" />
     <Content Include="Content\Sounds\boo.wav" />
     <Content Include="Content\Sounds\cheer.wav" />
     <Content Include="favicon-16x16.png" />
@@ -326,6 +347,9 @@
     <Content Include="Models\PoolStatsModel.edmx.diagram">
       <DependentUpon>PoolStatsModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Content\ProfileImages\Thumbs.db" />
+    <Content Include="Content\Posts\Images\Thumbs.db" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\JB-NEt.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
